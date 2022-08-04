@@ -1,0 +1,15 @@
+.layout {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.invalid {
+    color: red;
+}
+
+.time {
+    margin: 10px auto;
+    font-size: 20px;
+}
