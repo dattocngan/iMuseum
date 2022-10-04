@@ -1,178 +1,195 @@
-import React from "react";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
-import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-
-import avatar from "assets/img/faces/marc.jpg";
-
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0",
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
-  },
-};
-
-const useStyles = makeStyles(styles);
+import React, { useState } from 'react';
 
 export default function UserProfile() {
-  const classes = useStyles();
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isValidated, setIsValidated] = useState(false);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+      setIsValidated(true);
+    }
+  };
   return (
-    <div>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
-            </CardHeader>
-            <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Company (disabled)"
-                    id="company-disabled"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      disabled: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email address"
-                    id="email-address"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="First Name"
-                    id="first-name"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="Last Name"
-                    id="last-name"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="City"
-                    id="city"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Country"
-                    id="country"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Postal Code"
-                    id="postal-code"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-                  <CustomInput
-                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-                    id="about-me"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5,
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary">Update Profile</Button>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
-    </div>
+    <>
+      <div className="d-flex align-items-center justify-content-between">
+        <h3>Thông tin cá nhân</h3>
+        <button
+          className="btn btn-primary text-white"
+          style={{ width: '180px' }}
+          onClick={() => setIsChangingPassword(!isChangingPassword)}
+        >
+          {isChangingPassword ? 'Thông tin cá nhân' : 'Thay đổi mật khẩu'}
+        </button>
+      </div>
+      {!isChangingPassword && (
+        <form
+          className={`row g-3 needs-validation`}
+          noValidate
+          onSubmit={submitHandler}
+        >
+          <div className="col-md-4">
+            <label htmlFor="fullname" className="form-label">
+              Họ và tên
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="fullname"
+              placeholder="Họ và tên..."
+            />
+          </div>
+
+          <div className="col-md-3">
+            <label htmlFor="mobile" className="form-label">
+              Số điện thoại
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="mobile"
+              placeholder="Số điện thoại..."
+            />
+          </div>
+
+          <div className="col-md-5">
+            <label htmlFor="email" className="form-label">
+              Địa chỉ Email
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              placeholder="Địa chỉ Email..."
+            />
+          </div>
+
+          <div className="col-md-8">
+            <label htmlFor="address" className="form-label">
+              Address
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="address"
+              placeholder="Address..."
+            />
+          </div>
+
+          <div className="col-md-4">
+            <label htmlFor="date" className="form-label">
+              Birthday
+            </label>
+            <input type="date" className="form-control" id="date" />
+          </div>
+
+          <div>
+            <p className="mb-1">Sex</p>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="sex"
+                id="male"
+              />
+              <label className="form-check-label" htmlFor="male">
+                Male
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="sex"
+                id="female"
+                defaultChecked
+              />
+              <label className="form-check-label" htmlFor="female">
+                Female
+              </label>
+            </div>
+          </div>
+
+          <div className="col-md-12">
+            <label htmlFor="introduction" className="form-label">
+              Introduction
+            </label>
+            <textarea
+              type="text"
+              className="form-control w-100"
+              id="introduction"
+              placeholder="Some information about yourself..."
+              style={{ height: '150px' }}
+            />
+          </div>
+          <div className="col-12">
+            <button className="btn btn-primary" type="submit">
+              Submit form
+            </button>
+          </div>
+        </form>
+      )}
+
+      {isChangingPassword && (
+        <form
+          className={`row g-3 needs-validation ${
+            isValidated ? 'was-validated' : ''
+          }`}
+          noValidate
+          onSubmit={submitHandler}
+        >
+          <div className="col-md-4">
+            <label htmlFor="oldPassword" className="form-label">
+              Mật khẩu cũ
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="oldPassword"
+              placeholder="Nhập mật khẩu cũ..."
+              required
+            />
+            <div className="invalid-feedback">
+              Nhập mật khẩu hợp lệ (ít nhất 8 chữ số)
+            </div>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="newPassword" className="form-label">
+              Mật khẩu mới
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="newPassword"
+              placeholder="Nhập mật khẩu mới..."
+              required
+            />
+            <div className="invalid-feedback">
+              Nhập mật khẩu hợp lệ (ít nhất 8 chữ số)
+            </div>
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="confirmPassword" className="form-label">
+              Xác nhận mật khẩu
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="confirmPassword"
+              placeholder="Xác nhận khẩu mới..."
+              required
+            />
+            <div className="invalid-feedback">
+              Nhập mật khẩu hợp lệ (ít nhất 8 chữ số)
+            </div>
+          </div>
+
+          <div className="col-12">
+            <button className="btn btn-primary" type="submit">
+              Submit form
+            </button>
+          </div>
+        </form>
+      )}
+    </>
   );
 }
