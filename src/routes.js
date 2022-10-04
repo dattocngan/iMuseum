@@ -20,8 +20,8 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 // core components/views for Admin layout
 import UserProfile from "views/UserProfile/UserProfile.js";
-import TableList from "views/TableList/TableList.js";
 import Items from "./layouts/Admin/Items/Items";
+import Collections from "./layouts/Admin/Collections/Collections";
 
 const dashboardRoutes = [
   {
@@ -42,37 +42,9 @@ const dashboardRoutes = [
     path: "/collections",
     name: "Tất cả bộ sưu tập",
     icon: "content_paste",
-    component: TableList,
+    component: Collections,
     layout: "/admin",
-  },
-  // {
-  //   path: "/typography",
-  //   name: "Typography",
-  //   icon: LibraryBooks,
-  //   component: Typography,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: BubbleChart,
-  //   component: Icons,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/maps",
-  //   name: "Maps",
-  //   icon: LocationOn,
-  //   component: Maps,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/notifications",
-  //   name: "Notifications",
-  //   icon: Notifications,
-  //   component: NotificationsPage,
-  //   layout: "/admin",
-  // }
+  }
 ];
 
 export default dashboardRoutes;
