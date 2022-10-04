@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import classes from "./Signup.module.css";
 import {Link, useHistory} from "react-router-dom";
 
-import axios from "../../../api/axios";
+import {register} from "../../../api/http";
 
 function Signup() {
     const history = useHistory();
@@ -65,13 +65,19 @@ function Signup() {
         setErrorConfirmPassword();
 
         try {
-            const {data} = await axios.post('auth/signup', {
+            // const {data} = await axios.post('auth/signup', {
+            //     name: enteredName,
+            //     mobile: enteredPhone,
+            //     password: enteredPassword
+            // }, {withCredentials: true});
+
+            const response = await register({
                 name: enteredName,
                 mobile: enteredPhone,
                 password: enteredPassword
-            }, {withCredentials: true});
+            });
 
-            if (data) {
+            if (response.status === 201) {
                 history.push({
                     pathname: '/auth/signup/verify',
                     state: {
@@ -91,7 +97,7 @@ function Signup() {
             <div className="card">
                 {invalidForm && <span className={`text-center mt-2 ${classes.invalid}`}>SĐT đã được đăng kí</span>}
                 <article className="card-body">
-                    <Link to="/auth/login" className="float-right btn btn-outline-primary">Đăng nhập</Link>
+                    <Link to="/auth/login" className="float-end btn btn-outline-primary">Đăng nhập</Link>
                     <h4 className="card-title mb-4 mt-1">iMuseum</h4>
                     <form onSubmit={submitFormHandler}>
                         <div className="form-group">
@@ -115,7 +121,7 @@ function Signup() {
                             {!!errorConfirmPassword && <p className={classes.invalid}>{errorConfirmPassword}</p>}
                         </div>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary btn-block">Đăng kí</button>
+                            <button type="submit" className="btn btn-primary btn-block mt-3 form-control">Đăng kí</button>
                         </div>
                     </form>
                 </article>

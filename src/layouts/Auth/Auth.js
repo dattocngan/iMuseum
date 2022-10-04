@@ -1,9 +1,9 @@
 import React from "react";
 
 import { Switch, Route, Redirect } from "react-router-dom";
-import Login from "../views/Auth/Login/Login";
-import Signup from "../views/Auth/Signup/Signup";
-import Verify from "../views/Auth/Verify/Verify";
+import Login from "../../views/Auth/Login/Login";
+import Signup from "../../views/Auth/Signup/Signup";
+import Verify from "../../views/Auth/Verify/Verify";
 
 const Auth = () => {
     return (

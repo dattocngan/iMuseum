@@ -3,7 +3,7 @@ import {useHistory, Redirect} from 'react-router-dom';
 import Countdown from "react-countdown";
 
 import classes from "./Verify.module.css";
-import axios from "../../../api/axios";
+import {verify, refreshOtp} from "../../../api/http";
 
 function Verify() {
     const history = useHistory();
@@ -35,13 +35,18 @@ function Verify() {
         }
         setErrorOTP(false);
         try {
-            const response = await axios.post('auth/signup/verify', {
+            // const response = await axios.post('auth/signup/verify', {
+            //     mobile: mobile,
+            //     otp: enteredOTP
+            // });
+
+            const response = await verify({
                 mobile: mobile,
                 otp: enteredOTP
             });
 
-            if (!response.data) {
-                throw new Error(response.response.data['message'])
+            if (response.status !== 201) {
+                throw new Error(response.data['message'])
             } else {
                 alert('Đăng kí thành công!');
                 history.push('/auth/login');
@@ -55,15 +60,15 @@ function Verify() {
         const x = new Date();
         setRefreshTime(x.toString());
         try {
-            const response = await axios.post('auth/signup/refreshOTP', {
+            const response = await refreshOtp({
                 mobile: mobile
             });
 
-            if (response.data) {
+            if (response.status === 200) {
                 setRefreshOTP(true);
                 setRefreshMessage(response.data['message']);
             } else {
-                throw new Error(response.response.data['message']);
+                throw new Error(response.data['message']);
             }
         }catch (err) {
             setRefreshMessage(err.message);

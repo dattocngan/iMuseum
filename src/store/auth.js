@@ -1,21 +1,18 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialAuthState = {
-    isAuth: null,
-    token: ''
+    isAuth: null
 };
 
 const authSlide = createSlice({
     name: 'auth',
     initialState: initialAuthState,
     reducers: {
-        login(state, action) {
+        login(state) {
             state.isAuth = true;
-            state.token = action.payload;
         },
         logout(state) {
             state.isAuth = false;
-            state.token = '';
         }
     }
 });

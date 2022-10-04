@@ -1,34 +1,35 @@
 import React, {useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import Admin from "layouts/Admin";
+import Admin from "layouts/Admin/Admin";
 import { Route, Redirect, Switch } from "react-router-dom";
-import Auth from "layouts/Auth";
-import axios from "./api/axios";
+import Auth from "layouts/Auth/Auth";
 import {authActions} from "./store/auth";
+import {useJwt} from "react-jwt";
+import {setHeader} from "./api/http";
 
 const App = () => {
     const dispatch = useDispatch();
     const isAuth = useSelector((state) => state.auth.isAuth);
+    const token = localStorage.getItem('token');
+    const { decodedToken, isExpired } = useJwt(token);
 
     useEffect(() => {
-        (async () => {
-            const {data} =  await axios.post('auth/refresh', {}, {withCredentials: true});
-            if (data) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
-                dispatch(authActions.login(data['token']));
-            } else {
-                dispatch(authActions.logout());
-            }
-        })();
-    }, []);
+        if (token && !isExpired) {
+            localStorage.setItem('name', decodedToken?.name);
+            setHeader(token);
+            dispatch(authActions.login());
+        } else {
+            dispatch(authActions.logout());
+        }
+    }, [token, isExpired, decodedToken?.name]);
 
     return (
         <Switch>
             {!isAuth && isAuth !== null && <Route path="/auth" component={Auth} />}
             {!isAuth && isAuth !== null && <Redirect from="/" to="/auth/login" />}
             {isAuth && <Route path="/admin" component={Admin} />}
-            {isAuth && <Redirect from="/" to="/admin/dashboard" />}
+            {isAuth && <Redirect from="/" to="/admin/items" />}
         </Switch>
     );
 };

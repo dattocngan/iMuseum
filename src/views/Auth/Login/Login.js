@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {useDispatch} from "react-redux";
 
 import classes from './Login.module.css';
-import axios from '../../../api/axios';
+import {login, setHeader} from '../../../api/http';
 import {authActions} from "../../../store/auth";
 
 function Login() {
@@ -42,14 +42,14 @@ function Login() {
         setErrorPassword();
 
         try {
-            const {data} = await axios.post('auth/login', {
+            const response = await login({
                 mobile: enteredPhone,
                 password: enteredPassword
-            }, {withCredentials: true});
+            });
 
-            if (data) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${data['token']}`;
-                dispatch(authActions.login(data['token']));
+            if (response.status === 200) {
+                setHeader(response.data.token);
+                dispatch(authActions.login());
             } else {
                 throw Error("Login failed");
             }
@@ -64,7 +64,7 @@ function Login() {
             <div className="card">
                 {invalidForm && <span className={`text-center mt-2 ${classes.invalid}`}>SĐT hoặc mật khẩu không đúng</span>}
                 <article className="card-body">
-                    <Link to="/auth/signup" className="float-right btn btn-outline-primary">Đăng kí</Link>
+                    <Link to="/auth/signup" className="float-end btn btn-outline-primary">Đăng kí</Link>
                     <h4 className="card-title mb-4 mt-1">iMuseum</h4>
                     <form onSubmit={submitFormHandler}>
                         <div className="form-group">
@@ -78,7 +78,7 @@ function Login() {
                             {!!errorPassword && <p className={classes.invalid}>{errorPassword}</p>}
                         </div>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary btn-block">Đăng nhập</button>
+                            <button type="submit" className="btn btn-primary btn-block mt-4 form-control">Đăng nhập</button>
                         </div>
                     </form>
                 </article>
