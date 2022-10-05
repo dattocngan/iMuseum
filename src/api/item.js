@@ -35,3 +35,12 @@ export const getMaterials = async () => {
         return err.response;
     }
 };
+
+export const deleteItem = async (id) => {
+    try {
+      const response = await axios.delete(`items/${id}`);
+      return response;
+    } catch (err) {
+      return err.response;
+    }
+}
