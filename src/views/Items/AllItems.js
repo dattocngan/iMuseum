@@ -9,6 +9,8 @@ export default function AllItems() {
     const [pageCount, setPageCount] = useState(0);
     let [itemOffset, setItemOffset] = useState(1);
 
+    console.log(items);
+
     useEffect(() => {
         // limit 5
         getItems(0)
