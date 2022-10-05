@@ -50,7 +50,7 @@ export default function AllItems() {
                         <tr key={itemOffset}>
                             <th scope="row" className="align-middle">{itemOffset++}</th>
                             <td className="align-middle">{item.name}</td>
-                            <td className="align-middle"><img width="80%" src={item.feature_image.split('/')[3] !== 'null' ? item.feature_image : 'https://sites.google.com/site/hinhanhdep24h/_/rsrc/1436687439788/home/hinh%20anh%20thien%20nhien%20dep%202015%20%281%29.jpeg'}/></td>
+                            <td className="align-middle"><img alt={''} width="80%" src={item.feature_image.split('/')[3] !== 'null' ? item.feature_image : 'https://sites.google.com/site/hinhanhdep24h/_/rsrc/1436687439788/home/hinh%20anh%20thien%20nhien%20dep%202015%20%281%29.jpeg'}/></td>
                             <td className="align-middle">{item.collected_date ? moment(item.collected_date).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')}</td>
                             <td className="align-middle">{item.status ? 'Đã được duyệt' : 'Chưa được duyệt'}</td>
                             <td className="align-middle"><button className="btn btn-primary">Chi tiết</button></td>

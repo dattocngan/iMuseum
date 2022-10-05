@@ -50,7 +50,7 @@ function AllCollections() {
                         <tr key={collectionOffset}>
                             <th scope="row" className="align-middle">{collectionOffset++}</th>
                             <td className="align-middle">{collection.title}</td>
-                            <td className="align-middle"><img width="80%" src={collection.image.split('/')[3] !== 'null' ? collection.image : 'https://sites.google.com/site/hinhanhdep24h/_/rsrc/1436687439788/home/hinh%20anh%20thien%20nhien%20dep%202015%20%281%29.jpeg'}/></td>
+                            <td className="align-middle"><img alt={''} width="80%" src={collection.image.split('/')[3] !== 'null' ? collection.image : 'https://sites.google.com/site/hinhanhdep24h/_/rsrc/1436687439788/home/hinh%20anh%20thien%20nhien%20dep%202015%20%281%29.jpeg'}/></td>
                             <td className="align-middle">{collection.type}</td>
                             <td className="align-middle">{collection.status ? 'Đã được duyệt' : 'Chưa được duyệt'}</td>
                             <td className="align-middle"><button className="btn btn-primary">Chi tiết</button></td>

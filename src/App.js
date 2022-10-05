@@ -22,7 +22,7 @@ const App = () => {
         } else {
             dispatch(authActions.logout());
         }
-    }, [token, isExpired, decodedToken?.name]);
+    }, [token, isExpired, decodedToken?.name, dispatch]);
 
     return (
         <Switch>

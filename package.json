@@ -27,6 +27,9 @@
     "react-scripts": "4.0.3",
     "react-swipeable-views": "0.13.9"
   },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -36,7 +39,8 @@
     "lint:check": "eslint . --ext=js,jsx;  exit 0",
     "lint:fix": "eslint . --ext=js,jsx --fix;  exit 0",
     "build-package-css": "cp src/assets/css/material-dashboard-react.css dist/material-dashboard-react.css",
-    "build-package": "npm run build-package-css && babel src --out-dir dist"
+    "build-package": "npm run build-package-css && babel src --out-dir dist",
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -54,6 +58,7 @@
     "typescript": "4.2.4"
   },
   "devDependencies": {
+    "react-error-overlay": "6.0.9",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.0",
     "gulp": "4.0.2",
@@ -67,5 +72,11 @@
       "not op_mini all"
     ],
     "development": []
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   }
 }
