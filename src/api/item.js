@@ -71,3 +71,13 @@ export const deleteItem = async (id) => {
     return err.response;
   }
 }
+
+export const getAllItems = async () => {
+  try {
+    const response = await axios.get(`items`);
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+}
+
