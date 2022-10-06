@@ -8,3 +8,12 @@ export const getCollections = async (page) => {
         return err.response;
     }
 };
+
+export const createCollection = async (collection) => {
+    try {
+      const response = await axios.post(`collections`, collection);
+      return response;
+    } catch (err) {
+      return err.response;
+    }
+}

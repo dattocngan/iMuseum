@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {getItems} from "../../api/item";
+import {deleteItem, getItems} from "../../api/item";
 import moment from "moment";
 import ReactPaginate from "react-paginate";
 import {Link} from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function AllItems() {
     const [items, setItems] = useState([]);
@@ -31,6 +32,25 @@ export default function AllItems() {
                 }
             })
     }
+
+    const deleteItemHandler = (data) => {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            setItems(items.filter((item) => item.item_id !== data));
+            deleteItem(data).then((response) => console.log(response));
+          }
+        });
+    }
+
     return (
         <>
             <button className="btn btn-success mb-3"><Link to='/admin/items/add' style={{ color: '#FFF' }}>Thêm hiện vật mới</Link></button>
@@ -56,7 +76,7 @@ export default function AllItems() {
                             <td className="align-middle">{item.collected_date ? moment(item.collected_date).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')}</td>
                             <td className="align-middle">{item.status ? 'Đã được duyệt' : 'Chưa được duyệt'}</td>
                             <td className="align-middle"><button className="btn btn-primary"><Link to={`/admin/items/${item.item_id}`} style={{ color: '#FFF' }}>Chi tiết</Link></button></td>
-                            <td className="align-middle"><button className="btn btn-danger" disabled={item.status}>Xóa</button></td>
+                            <td className="align-middle"><button className="btn btn-danger" disabled={item.status} onClick={() => deleteItemHandler(item.item_id)} >Xóa</button></td>
                         </tr>
                     )}
                     </tbody>
