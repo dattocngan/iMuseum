@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Snack from "@material-ui/core/SnackbarContent";
 import IconButton from "@material-ui/core/IconButton";
 // @material-ui/icons
@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 export default function SnackbarContent(props) {
   const classes = useStyles();
-  const { message, color, close, icon, rtlActive } = props;
+  const {message, color, close, icon, rtlActive} = props;
   var action = [];
   const messageClasses = classNames({
     [classes.iconMessage]: icon !== undefined,
@@ -27,7 +27,7 @@ export default function SnackbarContent(props) {
         aria-label="Close"
         color="inherit"
       >
-        <Close className={classes.close} />
+        <Close className={classes.close}/>
       </IconButton>,
     ];
   }
@@ -35,14 +35,14 @@ export default function SnackbarContent(props) {
     <Snack
       message={
         <div>
-          {icon !== undefined ? <props.icon className={classes.icon} /> : null}
+          {icon !== undefined ? <props.icon className={classes.icon}/> : null}
           <span className={messageClasses}>{message}</span>
         </div>
       }
       classes={{
         root: classes.root + " " + classes[color],
         message: classes.message,
-        action: classNames({ [classes.actionRTL]: rtlActive }),
+        action: classNames({[classes.actionRTL]: rtlActive}),
       }}
       action={action}
     />

@@ -2,9 +2,9 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { NavLink, useLocation } from "react-router-dom";
+import {Link, NavLink, useLocation} from "react-router-dom";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
@@ -22,11 +22,13 @@ const useStyles = makeStyles(styles);
 export default function Sidebar(props) {
   const classes = useStyles();
   let location = useLocation();
+
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
-  const { color, logo, image, logoText, routes } = props;
+
+  const {color, image, logoText, routes} = props;
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -81,20 +83,20 @@ export default function Sidebar(props) {
       })}
     </List>
   );
-  var brand = (
+  let brand = (
     <div className={classes.logo}>
-      <a
-        href="https://www.creative-tim.com?ref=mdr-sidebar"
+      <Link
+        to="/"
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive,
         })}
-        target="_blank"
+        style={{textAlign: 'center'}}
       >
-        <div className={classes.logoImage}>
-          <img src={logo} alt="logo" className={classes.img} />
-        </div>
+        {/*<div className={classes.logoImage}>*/}
+        {/*  <img src={logo} alt="logo" className={classes.img}/>*/}
+        {/*</div>*/}
         {logoText}
-      </a>
+      </Link>
     </div>
   );
   return (
@@ -116,13 +118,13 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+            {props.rtlActive ? <RTLNavbarLinks/> : <AdminNavbarLinks/>}
             {links}
           </div>
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
+              style={{backgroundImage: "url(" + image + ")"}}
             />
           ) : null}
         </Drawer>
@@ -143,7 +145,7 @@ export default function Sidebar(props) {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: "url(" + image + ")" }}
+              style={{backgroundImage: "url(" + image + ")"}}
             />
           ) : null}
         </Drawer>

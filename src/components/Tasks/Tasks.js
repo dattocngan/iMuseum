@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -32,7 +32,7 @@ export default function Tasks(props) {
     }
     setChecked(newChecked);
   };
-  const { tasksIndexes, tasks, rtlActive } = props;
+  const {tasksIndexes, tasks, rtlActive} = props;
   const tableCellClasses = classnames(classes.tableCell, {
     [classes.tableCellRTL]: rtlActive,
   });
@@ -46,8 +46,8 @@ export default function Tasks(props) {
                 checked={checked.indexOf(value) !== -1}
                 tabIndex={-1}
                 onClick={() => handleToggle(value)}
-                checkedIcon={<Check className={classes.checkedIcon} />}
-                icon={<Check className={classes.uncheckedIcon} />}
+                checkedIcon={<Check className={classes.checkedIcon}/>}
+                icon={<Check className={classes.uncheckedIcon}/>}
                 classes={{
                   checked: classes.checked,
                   root: classes.root,
@@ -60,7 +60,7 @@ export default function Tasks(props) {
                 id="tooltip-top"
                 title="Edit Task"
                 placement="top"
-                classes={{ tooltip: classes.tooltip }}
+                classes={{tooltip: classes.tooltip}}
               >
                 <IconButton
                   aria-label="Edit"
@@ -77,7 +77,7 @@ export default function Tasks(props) {
                 id="tooltip-top-start"
                 title="Remove"
                 placement="top"
-                classes={{ tooltip: classes.tooltip }}
+                classes={{tooltip: classes.tooltip}}
               >
                 <IconButton
                   aria-label="Close"

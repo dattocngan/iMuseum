@@ -1,28 +1,28 @@
 import React from 'react'
-import { useState, useRef } from 'react';
-import { createCollection } from 'api/collection';
+import {useState, useRef} from 'react';
+import {createCollection} from 'api/collection';
 
 const AddCollection = () => {
-    const [isValidated, setIsValidated] = useState(false);
-    const titleInputRef = useRef();
-    const descriptionInputRef = useRef();
-    const featureImageInputRef = useRef();
+  const [isValidated, setIsValidated] = useState(false);
+  const titleInputRef = useRef();
+  const descriptionInputRef = useRef();
+  const featureImageInputRef = useRef();
 
-    const submitHandler = (e) => {
-      e.preventDefault();
-      if (!e.target.checkValidity()) {
-        return setIsValidated(true);
-      }
-      const formData = new FormData();
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+      return setIsValidated(true);
+    }
+    const formData = new FormData();
 
-      formData.append("title", titleInputRef.current.value);
-      formData.append("description", descriptionInputRef.current.value);
-      formData.append("feature_image", featureImageInputRef.current.files[0]);
+    formData.append("title", titleInputRef.current.value);
+    formData.append("description", descriptionInputRef.current.value);
+    formData.append("feature_image", featureImageInputRef.current.files[0]);
 
-      createCollection(formData).then((response) => {
-        console.log(response.data.message);
-      });
-    };
+    createCollection(formData).then((response) => {
+      console.log(response.data.message);
+    });
+  };
   return (
     <form
       className={`row g-3 needs-validation ${
