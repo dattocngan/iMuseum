@@ -67,10 +67,10 @@ export default function UserProfile() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setIsValidated(true);
     if (!e.target.checkValidity()) {
       return;
     }
-    setIsValidated(true);
 
     if (!isChangingPassword) {
       setIsLoading(true);
@@ -103,6 +103,7 @@ export default function UserProfile() {
         newPassword: passwordInput.newPassword,
       };
       updateCollectorInformation(data).then((response) => {
+        console.log(response);
         setIsLoading(false);
         if (response.status === 200) {
           Swal.fire('Good job!', response.data.message, 'success');
@@ -295,6 +296,7 @@ export default function UserProfile() {
               id="oldPassword"
               placeholder="Nhập mật khẩu cũ..."
               name="oldPassword"
+              minLength={8}
               value={passwordInput.oldPassword}
               onChange={onChangePasswordInput}
               required
@@ -313,6 +315,7 @@ export default function UserProfile() {
               id="newPassword"
               placeholder="Nhập mật khẩu mới..."
               name="newPassword"
+              minLength={8}
               value={passwordInput.newPassword}
               onChange={onChangePasswordInput}
               required
@@ -331,6 +334,7 @@ export default function UserProfile() {
               id="confirmPassword"
               placeholder="Xác nhận khẩu mới..."
               name="confirmPassword"
+              minLength={8}
               value={passwordInput.confirmPassword}
               onChange={onChangePasswordInput}
               required
