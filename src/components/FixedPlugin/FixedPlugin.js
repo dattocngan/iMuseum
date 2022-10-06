@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { Component } from "react";
+import React, {Component} from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // nodejs library that concatenates classes
@@ -27,7 +27,7 @@ export default function FixedPlugin(props) {
     >
       <div id="fixedPluginClasses" className={props.fixedClasses}>
         <div onClick={handleClick}>
-          <i className="fa fa-cog fa-2x" />
+          <i className="fa fa-cog fa-2x"/>
         </div>
         <ul className="dropdown-menu">
           <li className="header-title">SIDEBAR FILTERS</li>
@@ -101,7 +101,7 @@ export default function FixedPlugin(props) {
                 props.handleImageClick(imagine1);
               }}
             >
-              <img src={imagine1} alt="..." />
+              <img src={imagine1} alt="..."/>
             </a>
           </li>
           <li className={bgImage === imagine2 ? "active" : ""}>
@@ -112,7 +112,7 @@ export default function FixedPlugin(props) {
                 props.handleImageClick(imagine2);
               }}
             >
-              <img src={imagine2} alt="..." />
+              <img src={imagine2} alt="..."/>
             </a>
           </li>
           <li className={bgImage === imagine3 ? "active" : ""}>
@@ -123,7 +123,7 @@ export default function FixedPlugin(props) {
                 props.handleImageClick(imagine3);
               }}
             >
-              <img src={imagine3} alt="..." />
+              <img src={imagine3} alt="..."/>
             </a>
           </li>
           <li className={bgImage === imagine4 ? "active" : ""}>
@@ -134,7 +134,7 @@ export default function FixedPlugin(props) {
                 props.handleImageClick(imagine4);
               }}
             >
-              <img src={imagine4} alt="..." />
+              <img src={imagine4} alt="..."/>
             </a>
           </li>
 
@@ -172,7 +172,7 @@ export default function FixedPlugin(props) {
               Documentation
             </Button>
           </li>
-          <li className="adjustments-line" />
+          <li className="adjustments-line"/>
         </ul>
       </div>
     </div>

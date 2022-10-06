@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Snack from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 // @material-ui/icons
@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 export default function Snackbar(props) {
   const classes = useStyles();
-  const { message, color, close, icon, place, open, rtlActive } = props;
+  const {message, color, close, icon, place, open, rtlActive} = props;
   var action = [];
   const messageClasses = classNames({
     [classes.iconMessage]: icon !== undefined,
@@ -28,7 +28,7 @@ export default function Snackbar(props) {
         color="inherit"
         onClick={() => props.closeNotification()}
       >
-        <Close className={classes.close} />
+        <Close className={classes.close}/>
       </IconButton>,
     ];
   }
@@ -40,13 +40,13 @@ export default function Snackbar(props) {
           place.indexOf("l") !== -1
             ? "left"
             : place.indexOf("c") !== -1
-            ? "center"
-            : "right",
+              ? "center"
+              : "right",
       }}
       open={open}
       message={
         <div>
-          {icon !== undefined ? <props.icon className={classes.icon} /> : null}
+          {icon !== undefined ? <props.icon className={classes.icon}/> : null}
           <span className={messageClasses}>{message}</span>
         </div>
       }
@@ -55,7 +55,7 @@ export default function Snackbar(props) {
         classes: {
           root: classes.root + " " + classes[color],
           message: classes.message,
-          action: classNames({ [classes.actionRTL]: rtlActive }),
+          action: classNames({[classes.actionRTL]: rtlActive}),
         },
       }}
     />

@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import Grow from "@material-ui/core/Grow";
@@ -52,7 +52,7 @@ export default function RTLNavbarLinks() {
           }}
         />
         <Button color="white" aria-label="edit" justIcon round>
-          <Search />
+          <Search/>
         </Button>
       </div>
       <Button
@@ -62,7 +62,7 @@ export default function RTLNavbarLinks() {
         aria-label="Dashboard"
         className={classes.buttonLink}
       >
-        <Dashboard className={classes.icons} />
+        <Dashboard className={classes.icons}/>
         <Hidden mdUp implementation="css">
           <p className={classes.linkText}>آمارها</p>
         </Hidden>
@@ -77,7 +77,7 @@ export default function RTLNavbarLinks() {
           onClick={handleToggle}
           className={classes.buttonLink}
         >
-          <Notifications className={classes.icons} />
+          <Notifications className={classes.icons}/>
           <span className={classes.notifications}>۵</span>
           <Hidden mdUp implementation="css">
             <p onClick={handleToggle} className={classes.linkText}>
@@ -91,12 +91,12 @@ export default function RTLNavbarLinks() {
           transition
           disablePortal
           className={
-            classNames({ [classes.popperClose]: !open }) +
+            classNames({[classes.popperClose]: !open}) +
             " " +
             classes.popperNav
           }
         >
-          {({ TransitionProps, placement }) => (
+          {({TransitionProps, placement}) => (
             <Grow
               {...TransitionProps}
               id="menu-list-grow"
@@ -152,7 +152,7 @@ export default function RTLNavbarLinks() {
         aria-label="Person"
         className={classes.buttonLink}
       >
-        <Person className={classes.icons} />
+        <Person className={classes.icons}/>
         <Hidden mdUp implementation="css">
           <p className={classes.linkText}>حساب کاربری</p>
         </Hidden>

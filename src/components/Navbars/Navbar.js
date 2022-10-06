@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -21,7 +21,7 @@ const useStyles = makeStyles(styles);
 
 export default function Header(props) {
   const classes = useStyles();
-  const { color } = props;
+  const {color} = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
@@ -35,7 +35,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks />
+          <AdminNavbarLinks/>
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
@@ -43,7 +43,7 @@ export default function Header(props) {
             aria-label="open drawer"
             onClick={props.handleDrawerToggle}
           >
-            <Menu />
+            <Menu/>
           </IconButton>
         </Hidden>
       </Toolbar>

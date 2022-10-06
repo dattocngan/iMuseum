@@ -1,5 +1,5 @@
-import { getCollectorInformation, updateCollectorInformation } from 'api/http';
-import React, { useEffect, useState } from 'react';
+import {getCollectorInformation, updateCollectorInformation} from 'api/http';
+import React, {useEffect, useState} from 'react';
 import Loader from 'UI/Loader';
 import Modal from 'UI/Modal';
 import Swal from 'sweetalert2';
@@ -129,15 +129,15 @@ export default function UserProfile() {
 
   return (
     <>
-      {isLoading && <Modal children={<Loader />} />}
-      {isLoadingDataFromDb && <Loader />}
+      {isLoading && <Modal children={<Loader/>}/>}
+      {isLoadingDataFromDb && <Loader/>}
       <div className="d-flex align-items-center justify-content-between">
         <h3>
           {!isChangingPassword ? 'Thông tin cá nhân' : 'Thay đổi mật khẩu'}
         </h3>
         <button
           className="btn btn-primary text-white"
-          style={{ width: '180px' }}
+          style={{width: '180px'}}
           onClick={() => setIsChangingPassword(!isChangingPassword)}
         >
           {isChangingPassword ? 'Thông tin cá nhân' : 'Thay đổi mật khẩu'}
@@ -265,7 +265,7 @@ export default function UserProfile() {
               name="introduction"
               id="introduction"
               placeholder="Một vài thông tin về bản thân..."
-              style={{ height: '150px' }}
+              style={{height: '150px'}}
               onChange={onChangeProfileInput}
               value={profileInput.introduction}
             />

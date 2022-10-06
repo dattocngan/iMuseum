@@ -1,20 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialAuthState = {
-    isAuth: null
+  isAuth: null
 };
 
 const authSlide = createSlice({
-    name: 'auth',
-    initialState: initialAuthState,
-    reducers: {
-        login(state) {
-            state.isAuth = true;
-        },
-        logout(state) {
-            state.isAuth = false;
-        }
+  name: 'auth',
+  initialState: initialAuthState,
+  reducers: {
+    login(state) {
+      state.isAuth = true;
+    },
+    logout(state) {
+      state.isAuth = false;
     }
+  }
 });
 
 export const authActions = authSlide.actions;
