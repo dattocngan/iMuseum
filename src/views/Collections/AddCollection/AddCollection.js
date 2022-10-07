@@ -1,9 +1,9 @@
-import React from 'react';
-import { useState, useRef } from 'react';
-import { createCollection } from 'api/collection';
-import DialogImageList from 'components/Dialog/DialogImageList';
-import Button from '@material-ui/core/Button';
-import Swal from 'sweetalert2';
+import React from "react";
+import { useState, useRef } from "react";
+import { createCollection } from "api/collection";
+import DialogImageList from "components/Dialog/DialogImageList";
+import Button from "@material-ui/core/Button";
+import Swal from "sweetalert2";
 
 const AddCollection = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -22,42 +22,44 @@ const AddCollection = () => {
     }
     const formData = new FormData();
 
-    formData.append('title', titleInputRef.current.value);
-    formData.append('description', descriptionInputRef.current.value);
-    formData.append('image', imageInputRef.current.files[0]);
+    formData.append("title", titleInputRef.current.value);
+    formData.append("description", descriptionInputRef.current.value);
+    formData.append("image", imageInputRef.current.files[0]);
     checkedItems.forEach((element) => {
       console.log(element);
-      formData.append('itemIdList', element);
+      formData.append("itemIdList", element);
     });
 
     if (checkedItems.length) {
       createCollection(formData).then((response) => {
         if (response.data) {
           Swal.fire({
-            icon: 'success',
-            title: 'Bộ sưu tập đã được tạo thành công',
+            icon: "success",
+            title: "Bộ sưu tập đã được tạo thành công",
             showConfirmButton: true,
           });
         }
       });
     } else {
-      console.log('length must be greater than 0');
+      console.log("length must be greater than 0");
       Swal.fire({
-        icon: 'warning',
-        title: 'Oops...',
-        text: 'Phải có ít nhất 1 ảnh trong bộ sưu tập!',
+        icon: "warning",
+        title: "Oops...",
+        text: "Phải có ít nhất 1 ảnh trong bộ sưu tập!",
       });
     }
   };
 
   const changeImageHandler = () => {
-    setImage(URL.createObjectURL(imageInputRef.current.files[0]));
+    if (imageInputRef.current.files.length > 0)
+      setImage(URL.createObjectURL(imageInputRef.current.files[0]));
+    else setImage(false);
   };
 
   return (
     <form
       className={`row g-3 needs-validation ${
-        isValidated ? 'was-validated' : ''
+        isValidated ? "was-validated" : ""
       }`}
       noValidate
       onSubmit={submitHandler}
@@ -78,7 +80,7 @@ const AddCollection = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
-            Ảnh bộ sưu tập
+            Ảnh đại diện bộ sưu tập
           </label>
           <input
             ref={imageInputRef}
@@ -88,8 +90,10 @@ const AddCollection = () => {
             onChange={changeImageHandler}
             required
           />
-          {image && <img src={image} className="w-50 mt-3 rounded" alt="" />}
-          <div className="invalid-feedback">Tiêu đề bộ sưu tập là bắt buộc</div>
+          {image && (
+            <img src={image} className="w-50 mt-3 rounded shadow-sm" alt="" />
+          )}
+          <div className="invalid-feedback">Ảnh đại diện là bắt buộc</div>
         </div>
       </div>
       <div className="col">
@@ -104,17 +108,16 @@ const AddCollection = () => {
           id="description"
         />
       </div>
-      <div className="col-12">
+      <div className="col-12 d-flex justify-content-between">
         <DialogImageList
           getAllCheckedItems={getAllCheckedItems}
           filterItemList={[]}
         />
-      </div>
-      <div className="col-12">
         <Button variant="contained" color="primary" type="submit">
           Thêm bộ sưu tập
         </Button>
       </div>
+      <div className="col-12"></div>
     </form>
   );
 };

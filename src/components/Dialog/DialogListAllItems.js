@@ -1,33 +1,33 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getAllItems } from 'api/item';
-import { FavoriteBorder, Favorite } from '@material-ui/icons';
-import { Checkbox } from '@material-ui/core';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getAllItems } from "api/item";
+import { FavoriteBorder, Favorite } from "@material-ui/icons";
+import { Checkbox } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
   },
   imageList: {
     width: 500,
     height: 450,
-    transform: 'translateZ(0)',
+    transform: "translateZ(0)",
     margin: 10,
   },
   titleBar: {
     background:
-      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-      'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%) !important',
+      "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%) !important",
   },
   icon: {
-    color: 'white',
+    color: "white",
   },
 }));
 
@@ -38,7 +38,7 @@ const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
 
   useEffect(() => {
     getAllItems().then((response) => {
-      console.log(response.data.items);
+      // console.log(response.data.items);
       setItemData(response.data.items);
     });
   }, []);
@@ -52,7 +52,6 @@ const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
 
     setCheckedItems(copyCheckedItems);
     getCheckedItems(copyCheckedItems);
-    // console.log(copyCheckedItems);
   };
   console.log(
     itemData.filter((item) => !filterItemList.includes(item.item_id)),
@@ -60,11 +59,15 @@ const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
   );
   return (
     <div className={classes.root}>
-      <ImageList rowHeight={160} gap={3} className={classes.imageList}>
+      <ImageList rowHeight={200} gap={3} className={classes.imageList}>
         {itemData
           .filter((item) => !filterItemList.includes(item.item_id))
-          .map((item) => (
-            <ImageListItem key={item.item_id}>
+          .map((item, index) => (
+            <ImageListItem
+              key={item.item_id}
+              cols={index % 3 !== 2 ? 1 : 2}
+              className="overflow-hidden"
+            >
               <img src={item.feature_image} alt={item.name} />
               <ImageListItemBar
                 title={item.name}

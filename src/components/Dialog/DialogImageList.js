@@ -1,24 +1,26 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogListAllItems from './DialogListAllItems';
-import { useState } from 'react';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogListAllItems from "./DialogListAllItems";
+import { useState } from "react";
+
+let checkedItemsCount = [];
 
 const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
   const [open, setOpen] = React.useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
 
   const getCheckedItems = (data) => {
-    setCheckedItems(data);
-    getAllCheckedItems(data);
+    checkedItemsCount = data;
   };
 
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
+    console.log(checkedItems);
     setOpen(false);
   };
 
@@ -34,13 +36,20 @@ const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
   }, [open]);
 
   function addCheckedItemsHandler() {
-    console.log(checkedItems);
+    console.log(checkedItemsCount);
+    setCheckedItems(checkedItemsCount);
+    getAllCheckedItems(checkedItemsCount);
     setOpen(false);
   }
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        color="secondary"
+        size="small"
+        onClick={handleClickOpen}
+      >
         Thêm hiện vật
       </Button>
       {checkedItems.length > 0 && (
