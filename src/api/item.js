@@ -2,7 +2,9 @@ import axios from "axios";
 
 export const getItems = async (page) => {
   try {
-    const response = await axios.get(`items?page=${page}`);
+    let url = 'items';
+    url += (page) ? `?page=${page}` : '';
+    const response = await axios.get(url);
     return response;
   } catch (err) {
     return err.response;
@@ -71,3 +73,13 @@ export const deleteItem = async (id) => {
     return err.response;
   }
 }
+
+export const getAllItems = async () => {
+  try {
+    const response = await axios.get(`items`);
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+}
+
