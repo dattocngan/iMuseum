@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const getCollections = async (page) => {
   try {
@@ -16,4 +16,13 @@ export const createCollection = async (collection) => {
   } catch (err) {
     return err.response;
   }
-}
+};
+
+export const getCollection = async (collection_id) => {
+  try {
+    const response = await axios.get(`collections/${collection_id}`);
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+};

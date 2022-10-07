@@ -1,12 +1,12 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogListAllItems from "./DialogListAllItems";
-import { useState } from "react";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogListAllItems from './DialogListAllItems';
+import { useState } from 'react';
 
-const DialogImageList = ({ getAllCheckedItems }) => {
+const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
   const [open, setOpen] = React.useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
 
@@ -54,7 +54,10 @@ const DialogImageList = ({ getAllCheckedItems }) => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">Chọn hiện vật</DialogTitle>
-        <DialogListAllItems getCheckedItems={getCheckedItems} />
+        <DialogListAllItems
+          getCheckedItems={getCheckedItems}
+          filterItemList={filterItemList}
+        />
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
