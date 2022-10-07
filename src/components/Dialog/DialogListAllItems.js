@@ -38,7 +38,7 @@ const DialogListAllItems = ({ getCheckedItems }) => {
 
   useEffect(() => {
     getAllItems().then((response) => {
-      console.log(response.data.items);
+      // console.log(response.data.items);
       setItemData(response.data.items);
     });
   }, []);
@@ -52,14 +52,17 @@ const DialogListAllItems = ({ getCheckedItems }) => {
 
     setCheckedItems(copyCheckedItems);
     getCheckedItems(copyCheckedItems);
-    // console.log(copyCheckedItems);
   };
 
   return (
     <div className={classes.root}>
-      <ImageList gap={3} className={classes.imageList}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.item_id}>
+      <ImageList rowHeight={200} gap={3} className={classes.imageList}>
+        {itemData.map((item, index) => (
+          <ImageListItem
+            key={item.item_id}
+            cols={index % 3 !== 2 ? 1 : 2}
+            className="overflow-hidden"
+          >
             <img src={item.feature_image} alt={item.name} />
             <ImageListItemBar
               title={item.name}

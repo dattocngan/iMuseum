@@ -51,7 +51,9 @@ const AddCollection = () => {
   };
 
   const changeImageHandler = () => {
-    setImage(URL.createObjectURL(imageInputRef.current.files[0]));
+    if (imageInputRef.current.files.length > 0)
+      setImage(URL.createObjectURL(imageInputRef.current.files[0]));
+    else setImage(false);
   };
 
   return (
@@ -78,7 +80,7 @@ const AddCollection = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">
-            Ảnh bộ sưu tập
+            Ảnh đại diện bộ sưu tập
           </label>
           <input
             ref={imageInputRef}
@@ -88,8 +90,10 @@ const AddCollection = () => {
             onChange={changeImageHandler}
             required
           />
-          {image && <img src={image} className="w-50 mt-3 rounded" alt="" />}
-          <div className="invalid-feedback">Tiêu đề bộ sưu tập là bắt buộc</div>
+          {image && (
+            <img src={image} className="w-50 mt-3 rounded shadow-sm" alt="" />
+          )}
+          <div className="invalid-feedback">Ảnh đại diện là bắt buộc</div>
         </div>
       </div>
       <div className="col">
@@ -104,14 +108,13 @@ const AddCollection = () => {
           id="description"
         />
       </div>
-      <div className="col-12">
+      <div className="col-12 d-flex justify-content-between">
         <DialogImageList getAllCheckedItems={getAllCheckedItems} />
-      </div>
-      <div className="col-12">
         <Button variant="contained" color="primary" type="submit">
           Thêm bộ sưu tập
         </Button>
       </div>
+      <div className="col-12"></div>
     </form>
   );
 };
