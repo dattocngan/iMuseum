@@ -1,14 +1,19 @@
-import React from 'react'
-import {useState, useRef} from 'react';
-import {createCollection} from 'api/collection';
-import DialogImageList from 'components/Dialog/DialogImageList';
+import React from "react";
+import { useState, useRef } from "react";
+import { createCollection } from "api/collection";
+import DialogImageList from "components/Dialog/DialogImageList";
 import Button from "@material-ui/core/Button";
+import Swal from "sweetalert2";
 
 const AddCollection = () => {
   const [isValidated, setIsValidated] = useState(false);
+  const [image, setImage] = useState(false);
+  const [checkedItems, setCheckedItems] = useState([]);
   const titleInputRef = useRef();
+  const imageInputRef = useRef();
   const descriptionInputRef = useRef();
-  const featureImageInputRef = useRef();
+
+  const getAllCheckedItems = (data) => setCheckedItems(data);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -19,12 +24,36 @@ const AddCollection = () => {
 
     formData.append("title", titleInputRef.current.value);
     formData.append("description", descriptionInputRef.current.value);
-    formData.append("feature_image", featureImageInputRef.current.files[0]);
-
-    createCollection(formData).then((response) => {
-      console.log(response.data.message);
+    formData.append("image", imageInputRef.current.files[0]);
+    checkedItems.forEach((element) => {
+      console.log(element);
+      formData.append("itemIdList", element);
     });
+
+    if (checkedItems.length) {
+      createCollection(formData).then((response) => {
+        if (response.data) {
+          Swal.fire({
+            icon: "success",
+            title: "Bộ sưu tập đã được tạo thành công",
+            showConfirmButton: true,
+          });
+        }
+      });
+    } else {
+      console.log("length must be greater than 0");
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Phải có ít nhất 1 ảnh trong bộ sưu tập!",
+      });
+    }
   };
+
+  const changeImageHandler = () => {
+    setImage(URL.createObjectURL(imageInputRef.current.files[0]));
+  };
+
   return (
     <form
       className={`row g-3 needs-validation ${
@@ -33,20 +62,37 @@ const AddCollection = () => {
       noValidate
       onSubmit={submitHandler}
     >
-      <div className="col-md-4">
-        <label htmlFor="title" className="form-label">
-          Tiêu đề:
-        </label>
-        <input
-          ref={titleInputRef}
-          type="text"
-          className="form-control"
-          id="title"
-          required
-        />
-        <div className="invalid-feedback">Tiêu đề bộ sưu tập là bắt buộc</div>
+      <div className="col">
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">
+            Tiêu đề:
+          </label>
+          <input
+            ref={titleInputRef}
+            type="text"
+            className="form-control"
+            id="title"
+            required
+          />
+          <div className="invalid-feedback">Tiêu đề bộ sưu tập là bắt buộc</div>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">
+            Ảnh bộ sưu tập
+          </label>
+          <input
+            ref={imageInputRef}
+            type="file"
+            className="form-control"
+            id="titleImage"
+            onChange={changeImageHandler}
+            required
+          />
+          {image && <img src={image} className="w-50 mt-3 rounded" alt="" />}
+          <div className="invalid-feedback">Tiêu đề bộ sưu tập là bắt buộc</div>
+        </div>
       </div>
-      <div className="col-md-6">
+      <div className="col">
         <label htmlFor="description" className="form-label">
           Mô tả:
         </label>
@@ -54,26 +100,20 @@ const AddCollection = () => {
           ref={descriptionInputRef}
           type="text"
           className="form-control"
+          rows={10}
           id="description"
-          required
         />
       </div>
-      <div className="col-md-2">
-        <label htmlFor="dimension" className="form-label">
-          Chọn hiện vật:
-        </label>
-        <DialogImageList />
+      <div className="col-12">
+        <DialogImageList getAllCheckedItems={getAllCheckedItems} />
       </div>
       <div className="col-12">
-        {/* <button className="btn btn-primary" type="submit">
-          Thêm bộ sưu tập
-        </button> */}
-        <Button variant="contained" color="primary" type='submit' >
+        <Button variant="contained" color="primary" type="submit">
           Thêm bộ sưu tập
         </Button>
       </div>
     </form>
   );
-}
-// title, description, img
-export default AddCollection
+};
+
+export default AddCollection;

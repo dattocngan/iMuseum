@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {ImageList, ImageListItem, ImageListItemBar, IconButton} from "@mui/material";
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getAllItems } from 'api/item';
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarIcon from "@material-ui/icons/Star";
+import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getAllItems } from "api/item";
+import { FavoriteBorder, Favorite } from "@material-ui/icons";
+import { Checkbox } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,13 +31,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DialogListAllItems = () => {
-    const classes = useStyles();
-    const [itemData, setItemData] = useState([]);
-    const [checked, setChecked] = useState(false);
-    useEffect(() => {
-        getAllItems().then((response) => {console.log(response.data.items); setItemData(response.data.items)})
-    }, [])
+const DialogListAllItems = ({ getCheckedItems }) => {
+  const classes = useStyles();
+  const [itemData, setItemData] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
+
+  useEffect(() => {
+    getAllItems().then((response) => {
+      console.log(response.data.items);
+      setItemData(response.data.items);
+    });
+  }, []);
+
+  const addCheckedItems = (id) => {
+    const copyCheckedItems = [...checkedItems];
+    const index = copyCheckedItems.indexOf(id);
+
+    if (index === -1) copyCheckedItems.push(id);
+    else copyCheckedItems.splice(index, 1);
+
+    setCheckedItems(copyCheckedItems);
+    getCheckedItems(copyCheckedItems);
+    // console.log(copyCheckedItems);
+  };
+
   return (
     <div className={classes.root}>
       <ImageList gap={3} className={classes.imageList}>
@@ -49,20 +66,13 @@ const DialogListAllItems = () => {
               position="top"
               className={classes.titleBar}
               actionIcon={
-                <IconButton
-                  aria-label={`star`}
+                <Checkbox
+                  icon={<FavoriteBorder />}
+                  checkedIcon={<Favorite />}
+                  name="checkedH"
                   className={classes.icon}
-                  onClick={() => {
-                    setChecked(checked ? false : true);
-                    console.log(checked);
-                  }}
-                >
-                  {checked ? (
-                    <StarBorderIcon className={classes.icon} />
-                  ) : (
-                    <StarIcon className={classes.icon} />
-                  )}
-                </IconButton>
+                  onChange={addCheckedItems.bind(null, item.item_id)}
+                />
               }
               actionPosition="left"
             />
@@ -71,6 +81,6 @@ const DialogListAllItems = () => {
       </ImageList>
     </div>
   );
-}
+};
 
-export default DialogListAllItems
+export default DialogListAllItems;
