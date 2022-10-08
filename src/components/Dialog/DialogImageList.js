@@ -1,22 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogListAllItems from "./DialogListAllItems";
-import { useState } from "react";
 
-let checkedItemsCount = [];
-
-const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
+const DialogImageList = ({ getAllCheckedItems, itemsData, filterItemList }) => {
+  let checkedItemsCount = [];
   const [open, setOpen] = React.useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
-
   const getCheckedItems = (data) => {
     checkedItemsCount = data;
   };
 
   const handleClickOpen = () => {
+    setCheckedItems([]);
     setOpen(true);
   };
   const handleClose = () => {
@@ -44,12 +42,7 @@ const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        color="secondary"
-        size="small"
-        onClick={handleClickOpen}
-      >
+      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         Thêm hiện vật
       </Button>
       {checkedItems.length > 0 && (
@@ -66,13 +59,14 @@ const DialogImageList = ({ getAllCheckedItems, filterItemList }) => {
         <DialogListAllItems
           getCheckedItems={getCheckedItems}
           filterItemList={filterItemList}
+          itemsData={itemsData}
         />
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            Hủy
           </Button>
           <Button onClick={addCheckedItemsHandler} color="primary">
-            Subscribe
+            Thêm
           </Button>
         </DialogActions>
       </Dialog>

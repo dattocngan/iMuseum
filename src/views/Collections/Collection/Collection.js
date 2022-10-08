@@ -1,12 +1,16 @@
-import { updateCollection } from 'api/collection';
-import { deleteItemOfCollection } from 'api/collection';
-import { getCollection } from 'api/collection';
-import DialogImageList from 'components/Dialog/DialogImageList';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
-import Loader from 'UI/Loader';
-import Modal from 'UI/Modal';
-import Swal from 'sweetalert2';
+import {
+  deleteItemOfCollection,
+  getCollection,
+  updateCollection,
+} from "api/collection";
+import DialogImageList from "components/Dialog/DialogImageList";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import Loader from "UI/Loader";
+import Modal from "UI/Modal";
+import Swal from "sweetalert2";
+import { getAllItems } from "../../../api/item";
+import Button from "@material-ui/core/Button";
 
 const Collection = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -24,7 +28,16 @@ const Collection = () => {
   const descriptionInputRef = useRef();
 
   const { id: collection_id } = useParams();
-  // useEffect(() => console.log(collection), [collection]);
+
+  const [itemsData, setItemsData] = useState([]);
+
+  useEffect(() => {
+    getAllItems().then((response) => {
+      console.log(response.data.items);
+      setItemsData(response.data.items);
+    });
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
     getCollection(collection_id).then((response) => {
@@ -45,50 +58,50 @@ const Collection = () => {
       return;
     }
     const formData = new FormData();
-    formData.append('title', titleInputRef.current.value);
-    formData.append('description', descriptionInputRef.current.value);
+    formData.append("title", titleInputRef.current.value);
+    formData.append("description", descriptionInputRef.current.value);
     if (imageInputRef.current.files.length > 0) {
-      formData.append('image', imageInputRef.current.files[0]);
+      formData.append("image", imageInputRef.current.files[0]);
     }
     if (checkedItems.length > 0) {
       checkedItems.forEach((item) => {
-        formData.append('itemIdList', item);
+        formData.append("itemIdList", item);
       });
     }
 
     Swal.fire({
       text:
-        'Bạn có chắc chắn muốn cập nhật thông tin cho bộ sưu tập này không?',
-      icon: 'warning',
+        "Bạn có chắc chắn muốn cập nhật thông tin cho bộ sưu tập này không?",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Cập nhật',
-      cancelButtonText: 'Hủy',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Cập nhật",
+      cancelButtonText: "Hủy",
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
 
         for (const [key, val] of formData.entries()) {
-          console.log(key, ': ', val);
+          console.log(key, ": ", val);
         }
 
         updateCollection(collection_id, formData).then((response) => {
           if (response.status === 200) {
             Swal.fire({
-              position: 'top-end',
-              icon: 'success',
+              position: "top-end",
+              icon: "success",
               title: response.data.message,
               showConfirmButton: false,
               timer: 2000,
             });
-            history.push('/admin/collections');
+            history.push("/admin/collections");
           } else {
             setIsLoading(false);
             Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Đã có lỗi xảy ra.',
+              icon: "error",
+              title: "Oops...",
+              text: "Đã có lỗi xảy ra.",
             });
           }
         });
@@ -122,14 +135,14 @@ const Collection = () => {
     };
 
     Swal.fire({
-      title: 'Bạn có chắc chắn muốn xóa những hiện vật đã chọn?',
-      text: 'Bạn sẽ không thể hoàn tác việc này!',
-      icon: 'warning',
+      title: "Bạn có chắc chắn muốn xóa những hiện vật đã chọn?",
+      text: "Bạn sẽ không thể hoàn tác việc này!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
@@ -141,7 +154,7 @@ const Collection = () => {
           });
           setCollection({ ...collection, items: newCollectionItems });
           setDeleteItemList([]);
-          Swal.fire('Chúc mừng!', response.data.message, 'success');
+          Swal.fire("Chúc mừng!", response.data.message, "success");
         });
       }
     });
@@ -169,17 +182,17 @@ const Collection = () => {
           </div>
           <div className="col-md-8">
             <h5>
-              <span className="fw-bold">Trạng thái:</span>{' '}
+              <span className="fw-bold">Trạng thái:</span>{" "}
               <span
-                className={collection.status ? 'text-success' : 'text-danger'}
+                className={collection.status ? "text-success" : "text-danger"}
               >
-                {collection.status ? 'Đã được duyệt' : 'Chưa được duyệt'}
+                {collection.status ? "Đã được duyệt" : "Chưa được duyệt"}
               </span>
             </h5>
 
             <form
               className={`row g-3 needs-validation ${
-                isValidated ? 'was-validated' : ''
+                isValidated ? "was-validated" : ""
               }`}
               noValidate
               onSubmit={submitHandler}
@@ -193,7 +206,7 @@ const Collection = () => {
                   ref={titleInputRef}
                   type="text"
                   className="form-control"
-                  style={{ outline: 'none' }}
+                  style={{ outline: "none" }}
                   defaultValue={collection.title}
                   id="title"
                   required
@@ -240,10 +253,11 @@ const Collection = () => {
                     <DialogImageList
                       getAllCheckedItems={getAllCheckedItems}
                       filterItemList={collectionItemsIdList}
+                      itemsData={itemsData}
                     />
-                    <button className="btn btn-primary" type="submit">
+                    <Button variant="contained" color="primary" type="submit">
                       Cập nhật bộ sưu tập
-                    </button>
+                    </Button>
                   </div>
                 </>
               )}
@@ -280,7 +294,7 @@ const Collection = () => {
                       <img
                         width="100%"
                         height="180px"
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                         className="image-link rounded"
                         src={item.feature_image}
                         alt=""

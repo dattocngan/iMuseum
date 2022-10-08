@@ -1,11 +1,8 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import { getAllItems } from 'api/item';
-import { FavoriteBorder, Favorite } from '@material-ui/icons';
-import { Checkbox } from '@material-ui/core';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import { Checkbox } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,17 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
+const DialogListAllItems = ({getCheckedItems, itemsData, filterItemList}) => {
   const classes = useStyles();
-  const [itemData, setItemData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
-
-  useEffect(() => {
-    getAllItems().then((response) => {
-      // console.log(response.data.items);
-      setItemData(response.data.items);
-    });
-  }, []);
 
   const addCheckedItems = (id) => {
     const copyCheckedItems = [...checkedItems];
@@ -60,7 +49,7 @@ const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
   return (
     <div className={classes.root}>
       <ImageList rowHeight={200} gap={3} className={classes.imageList}>
-        {itemData
+        {itemsData
           .filter((item) => !filterItemList.includes(item.item_id))
           .map((item, index) => (
             <ImageListItem
@@ -68,15 +57,15 @@ const DialogListAllItems = ({ getCheckedItems, filterItemList }) => {
               cols={index % 3 !== 2 ? 1 : 2}
               className="overflow-hidden"
             >
-              <img src={item.feature_image} alt={item.name} />
+              <img src={item.feature_image} alt={item.name}/>
               <ImageListItemBar
                 title={item.name}
                 position="top"
                 className={classes.titleBar}
                 actionIcon={
                   <Checkbox
-                    icon={<FavoriteBorder />}
-                    checkedIcon={<Favorite />}
+                    icon={<FavoriteBorder/>}
+                    checkedIcon={<Favorite/>}
                     name="checkedH"
                     className={classes.icon}
                     onChange={addCheckedItems.bind(null, item.item_id)}
