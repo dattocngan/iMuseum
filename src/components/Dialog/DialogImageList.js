@@ -17,6 +17,7 @@ const DialogImageList = ({ getAllCheckedItems }) => {
   };
 
   const handleClickOpen = () => {
+    setCheckedItems([]);
     setOpen(true);
   };
   const handleClose = () => {
