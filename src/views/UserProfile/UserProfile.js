@@ -1,50 +1,53 @@
-import {getCollectorInformation, updateCollectorInformation} from 'api/http';
-import React, {useEffect, useState} from 'react';
-import Loader from 'UI/Loader';
-import Modal from 'UI/Modal';
-import Swal from 'sweetalert2';
+import { getCollectorInformation, updateCollectorInformation } from "api/http";
+import React, { useEffect, useState } from "react";
+import Loader from "UI/Loader";
+import Modal from "UI/Modal";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { titleActions } from "../../store/title";
 
 export default function UserProfile() {
+  const dispatch = useDispatch();
+
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
   const [profileInput, setProfileInput] = useState({
-    fullname: '',
-    mobile: '',
-    email: '',
-    address: '',
-    birthday: '2015-12-31',
+    fullname: "",
+    mobile: "",
+    email: "",
+    address: "",
+    birthday: "2015-12-31",
     sex: null,
-    introduction: '',
+    introduction: "",
   });
 
   const [passwordInput, setPasswordInput] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [isEqual, setIsEqual] = useState(false);
   const [isLoadingDataFromDb, setIsLoadingDataFromDb] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    dispatch(titleActions.setTitle(" > Thông tin cá nhân"));
     setIsEqual(
       !passwordInput.newPassword.localeCompare(passwordInput.confirmPassword)
-        ? true
-        : false
     );
-  }, [passwordInput.newPassword, passwordInput.confirmPassword]);
+  }, [passwordInput.newPassword, passwordInput.confirmPassword, dispatch]);
   useEffect(() => {
     setIsLoadingDataFromDb(true);
     getCollectorInformation().then((response) => {
       if (response.status === 200) {
         setProfileInput({
-          fullname: response.data.full_name || '',
-          mobile: response.data.mobile || '',
-          email: response.data.email || '',
-          address: response.data.address || '',
-          birthday: response.data.birth_date || '2015-12-31',
-          sex: String(response.data.sex !== null ? response.data.sex : '0'),
-          introduction: response.data.introduction || '',
+          fullname: response.data.full_name || "",
+          mobile: response.data.mobile || "",
+          email: response.data.email || "",
+          address: response.data.address || "",
+          birthday: response.data.birth_date || "2015-12-31",
+          sex: String(response.data.sex !== null ? response.data.sex : "0"),
+          introduction: response.data.introduction || "",
         });
       }
       setIsLoadingDataFromDb(false);
@@ -85,11 +88,11 @@ export default function UserProfile() {
       }).then((response) => {
         setIsLoading(false);
         if (response.status === 200) {
-          Swal.fire('Good job!', response.data.message, 'success');
+          Swal.fire("Good job!", response.data.message, "success");
         } else {
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
+            icon: "error",
+            title: "Oops...",
             text: response.data.message,
           });
         }
@@ -106,21 +109,21 @@ export default function UserProfile() {
         console.log(response);
         setIsLoading(false);
         if (response.status === 200) {
-          Swal.fire('Good job!', response.data.message, 'success');
+          Swal.fire("Good job!", response.data.message, "success");
           setPasswordInput({
-            oldPassword: '',
-            newPassword: '',
-            confirmPassword: '',
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: "",
           });
           setIsValidated(false);
         } else {
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
+            icon: "error",
+            title: "Oops...",
             text:
               response.status !== 500
                 ? response.data.message
-                : 'Something went wrong',
+                : "Something went wrong",
           });
         }
       });
@@ -129,18 +132,18 @@ export default function UserProfile() {
 
   return (
     <>
-      {isLoading && <Modal children={<Loader/>}/>}
-      {isLoadingDataFromDb && <Loader/>}
+      {isLoading && <Modal children={<Loader />} />}
+      {isLoadingDataFromDb && <Loader />}
       <div className="d-flex align-items-center justify-content-between">
         <h3>
-          {!isChangingPassword ? 'Thông tin cá nhân' : 'Thay đổi mật khẩu'}
+          {!isChangingPassword ? "Thông tin cá nhân" : "Thay đổi mật khẩu"}
         </h3>
         <button
           className="btn btn-primary text-white"
-          style={{width: '180px'}}
+          style={{ width: "180px" }}
           onClick={() => setIsChangingPassword(!isChangingPassword)}
         >
-          {isChangingPassword ? 'Thông tin cá nhân' : 'Thay đổi mật khẩu'}
+          {isChangingPassword ? "Thông tin cá nhân" : "Thay đổi mật khẩu"}
         </button>
       </div>
       {!isLoadingDataFromDb && !isChangingPassword && (
@@ -233,7 +236,7 @@ export default function UserProfile() {
                 id="male"
                 value={0}
                 onChange={onChangeProfileInput}
-                defaultChecked={profileInput.sex === '0' ? true : false}
+                defaultChecked={profileInput.sex === "0" ? true : false}
               />
               <label className="form-check-label" htmlFor="male">
                 Nam
@@ -247,7 +250,7 @@ export default function UserProfile() {
                 value={1}
                 id="female"
                 onChange={onChangeProfileInput}
-                defaultChecked={profileInput.sex === '0' ? false : true}
+                defaultChecked={profileInput.sex === "0" ? false : true}
               />
               <label className="form-check-label" htmlFor="female">
                 Nữ
@@ -265,7 +268,7 @@ export default function UserProfile() {
               name="introduction"
               id="introduction"
               placeholder="Một vài thông tin về bản thân..."
-              style={{height: '150px'}}
+              style={{ height: "150px" }}
               onChange={onChangeProfileInput}
               value={profileInput.introduction}
             />
@@ -281,7 +284,7 @@ export default function UserProfile() {
       {!isLoadingDataFromDb && isChangingPassword && (
         <form
           className={`row g-3 needs-validation ${
-            isValidated ? 'was-validated' : ''
+            isValidated ? "was-validated" : ""
           }`}
           noValidate
           onSubmit={submitHandler}

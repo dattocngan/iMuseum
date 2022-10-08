@@ -28,7 +28,7 @@ export default function Sidebar(props) {
     return location.pathname === routeName;
   }
 
-  const {color, image, logoText, routes} = props;
+  const { color, image, logoText, routes } = props;
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -90,7 +90,7 @@ export default function Sidebar(props) {
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: props.rtlActive,
         })}
-        style={{textAlign: 'center'}}
+        style={{ textAlign: "center" }}
       >
         {/*<div className={classes.logoImage}>*/}
         {/*  <img src={logo} alt="logo" className={classes.img}/>*/}
@@ -118,13 +118,13 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks/> : <AdminNavbarLinks/>}
+            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
             {links}
           </div>
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{backgroundImage: "url(" + image + ")"}}
+              style={{ backgroundImage: "url(" + image + ")" }}
             />
           ) : null}
         </Drawer>
@@ -145,7 +145,7 @@ export default function Sidebar(props) {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{backgroundImage: "url(" + image + ")"}}
+              style={{ backgroundImage: "url(" + image + ")" }}
             />
           ) : null}
         </Drawer>

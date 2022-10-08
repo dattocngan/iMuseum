@@ -2,8 +2,8 @@ import axios from "axios";
 
 export const getItems = async (page) => {
   try {
-    let url = 'items';
-    url += (page) ? `?page=${page}` : '';
+    let url = "items";
+    url += page ? `?page=${page}` : "";
     const response = await axios.get(url);
     return response;
   } catch (err) {
@@ -40,12 +40,12 @@ export const updateItem = async (id, data) => {
 
 export const deleteImages = async (id, data) => {
   try {
-    const response = await axios.delete(`items/${id}/images`, {data: data});
+    const response = await axios.delete(`items/${id}/images`, { data: data });
     return response;
   } catch (err) {
     return err.response;
   }
-}
+};
 
 export const getAges = async () => {
   try {
@@ -72,7 +72,7 @@ export const deleteItem = async (id) => {
   } catch (err) {
     return err.response;
   }
-}
+};
 
 export const getAllItems = async () => {
   try {
@@ -81,5 +81,5 @@ export const getAllItems = async () => {
   } catch (err) {
     return err.response;
   }
-}
+};
 

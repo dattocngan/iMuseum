@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { addItem, getAges, getMaterials } from "../../../api/item";
 import Loader from "../../../UI/Loader";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import Modal from "../../../UI/Modal";
+import { useDispatch } from "react-redux";
+import { titleActions } from "../../../store/title";
 
 function AddItem() {
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const ageInputRef = useRef();
@@ -25,6 +29,7 @@ function AddItem() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    dispatch(titleActions.setTitle(" > Thêm mới hiện vật"));
     Promise.all([getAges(), getMaterials()])
       .then((results) => {
         setAges(results[0].data);
@@ -33,7 +38,7 @@ function AddItem() {
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -62,6 +67,7 @@ function AddItem() {
       history.push("/admin/items");
     });
   };
+
   return (
     <>
       {isLoading && <Modal children={<Loader />} />}
@@ -210,6 +216,7 @@ function AddItem() {
             id="description"
             rows="7"
           ></textarea>
+          />
         </div>
         <div className="col-12">
           <button className="btn btn-primary" type="submit">

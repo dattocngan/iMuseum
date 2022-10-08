@@ -1,8 +1,8 @@
-import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import AddCollection from 'views/Collections/AddCollection/AddCollection';
-import Collection from 'views/Collections/Collection/Collection';
-import AllCollections from '../../../views/Collections/AllCollections';
+import React from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
+import AddCollection from "views/Collections/AddCollection/AddCollection";
+import Collection from "views/Collections/Collection/Collection";
+import AllCollections from "../../../views/Collections/AllCollections";
 
 const Collections = () => {
   return (

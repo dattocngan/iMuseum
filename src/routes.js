@@ -44,7 +44,7 @@ const dashboardRoutes = [
     icon: "content_paste",
     component: Collections,
     layout: "/admin",
-  }
+  },
 ];
 
 export default dashboardRoutes;

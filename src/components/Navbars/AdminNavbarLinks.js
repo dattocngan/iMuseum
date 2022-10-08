@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import classNames from "classnames";
 // @material-ui/core components
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import Grow from "@material-ui/core/Grow";
@@ -17,8 +17,8 @@ import Person from "@material-ui/icons/Person";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
-import {authActions} from "../../store/auth";
-import {useHistory} from "react-router-dom";
+import { authActions } from "../../store/auth";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
@@ -26,9 +26,9 @@ export default function AdminNavbarLinks() {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const getName = localStorage.getItem('name');
+  const getName = localStorage.getItem("name");
   const [openProfile, setOpenProfile] = React.useState(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   useEffect(() => {
     setName(getName);
@@ -43,19 +43,20 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
-    history.push('/admin/user');
+    history.push("/admin/user");
   };
 
   const logoutHandler = async () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
+    localStorage.removeItem("token");
+    localStorage.removeItem("name");
     dispatch(authActions.logout());
-  }
-
+  };
 
   return (
     <div className="mt-2">
-      <span className={window.innerWidth > 959 ? "" : "text-white ms-4"}>Xin chào, {name}</span>
+      <span className={window.innerWidth > 959 ? "" : "text-white ms-4"}>
+        Xin chào, {name}
+      </span>
       <div className={classes.manager}>
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
@@ -66,7 +67,7 @@ export default function AdminNavbarLinks() {
           onClick={handleClickProfile}
           className={classes.buttonLink}
         >
-          <Person className={classes.icons}/>
+          <Person className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Profile</p>
           </Hidden>
@@ -77,12 +78,12 @@ export default function AdminNavbarLinks() {
           transition
           disablePortal
           className={
-            classNames({[classes.popperClose]: !openProfile}) +
+            classNames({ [classes.popperClose]: !openProfile }) +
             " " +
             classes.popperNav
           }
         >
-          {({TransitionProps, placement}) => (
+          {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               id="profile-menu-list-grow"
@@ -100,7 +101,7 @@ export default function AdminNavbarLinks() {
                     >
                       Profile
                     </MenuItem>
-                    <Divider light/>
+                    <Divider light />
                     <MenuItem
                       onClick={logoutHandler}
                       className={classes.dropdownItem}

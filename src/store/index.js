@@ -1,11 +1,12 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth";
-
+import titleReducer from "./title";
 
 const store = configureStore({
   reducer: {
-    auth: authReducer
-  }
+    auth: authReducer,
+    title: titleReducer,
+  },
 });
 
 export default store;

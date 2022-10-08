@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,31 +11,34 @@ import Hidden from "@material-ui/core/Hidden";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import AdminNavbarLinks from "./AdminNavbarLinks.js";
-import Button from "components/CustomButtons/Button.js";
-
 
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
-import {Link} from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
+  const title = useSelector((state) => state.title);
+
+  console.log(title);
+
   const classes = useStyles();
-  const {color} = props;
+  const { color } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
+
   return (
     <AppBar className={classes.appBar + appBarClasses}>
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" className={classes.title}>
-            <Link to={'/'} className="text-secondary">Bảo tàng iMuseum</Link>
-          </Button>
+          <span color="transparent" className="mx-3 fs-6">
+            {title}
+          </span>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks/>
+          <AdminNavbarLinks />
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
@@ -43,7 +46,7 @@ export default function Header(props) {
             aria-label="open drawer"
             onClick={props.handleDrawerToggle}
           >
-            <Menu/>
+            <Menu />
           </IconButton>
         </Hidden>
       </Toolbar>

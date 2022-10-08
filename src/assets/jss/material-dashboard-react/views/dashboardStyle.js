@@ -1,8 +1,8 @@
 import {
-  successColor,
-  whiteColor,
   grayColor,
   hexToRgb,
+  successColor,
+  whiteColor,
 } from "assets/jss/material-dashboard-react.js";
 
 const dashboardStyle = {

@@ -1,6 +1,6 @@
 import {
-  defaultFont,
   dangerColor,
+  defaultFont,
   whiteColor,
 } from "assets/jss/material-dashboard-react.js";
 

@@ -1,17 +1,24 @@
-import React from "react";
-import { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createCollection } from "api/collection";
 import DialogImageList from "components/Dialog/DialogImageList";
 import Button from "@material-ui/core/Button";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { titleActions } from "../../../store/title";
 
 const AddCollection = () => {
+  const dispatch = useDispatch();
+
   const [isValidated, setIsValidated] = useState(false);
   const [image, setImage] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
   const titleInputRef = useRef();
   const imageInputRef = useRef();
   const descriptionInputRef = useRef();
+
+  useEffect(() => {
+    dispatch(titleActions.setTitle(" > Thêm mới bộ sưu tập"));
+  }, [dispatch]);
 
   const getAllCheckedItems = (data) => setCheckedItems(data);
 

@@ -1,10 +1,10 @@
 import React from "react";
-import {Switch, Route, Redirect} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
@@ -31,20 +31,20 @@ const switchRoutes = (
       }
       return null;
     })}
-    <Redirect from="/admin" to="/admin/items"/>
+    <Redirect from="/admin" to="/admin/items" />
   </Switch>
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({...rest}) {
+export default function Admin({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
   const image = bgImage;
-  const color = "blue"
+  const color = "blue";
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

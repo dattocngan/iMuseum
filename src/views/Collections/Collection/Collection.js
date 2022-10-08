@@ -1,9 +1,9 @@
-import { getCollection } from 'api/collection';
-import DialogImageList from 'components/Dialog/DialogImageList';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import Loader from 'UI/Loader';
-import Modal from 'UI/Modal';
+import { getCollection } from "api/collection";
+import DialogImageList from "components/Dialog/DialogImageList";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Loader from "UI/Loader";
+import Modal from "UI/Modal";
 
 const Collection = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -40,14 +40,14 @@ const Collection = () => {
       return;
     }
     const formData = new FormData();
-    formData.append('title', titleInputRef.current.value);
-    formData.append('description', descriptionInputRef.current.value);
+    formData.append("title", titleInputRef.current.value);
+    formData.append("description", descriptionInputRef.current.value);
     if (imageInputRef.current.files.length > 0) {
-      formData.append('image', imageInputRef.current.files[0]);
+      formData.append("image", imageInputRef.current.files[0]);
     }
     if (checkedItems.length > 0) {
       checkedItems.forEach((item) => {
-        formData.append('itemIdList', item);
+        formData.append("itemIdList", item);
       });
     }
   };
@@ -98,17 +98,17 @@ const Collection = () => {
           </div>
           <div className="col-md-8">
             <h5>
-              <span className="fw-bold">Trạng thái:</span>{' '}
+              <span className="fw-bold">Trạng thái:</span>{" "}
               <span
-                className={collection.status ? 'text-success' : 'text-danger'}
+                className={collection.status ? "text-success" : "text-danger"}
               >
-                {collection.status ? 'Đã được duyệt' : 'Chưa được duyệt'}
+                {collection.status ? "Đã được duyệt" : "Chưa được duyệt"}
               </span>
             </h5>
 
             <form
               className={`row g-3 needs-validation ${
-                isValidated ? 'was-validated' : ''
+                isValidated ? "was-validated" : ""
               }`}
               noValidate
               onSubmit={submitHandler}
@@ -122,7 +122,7 @@ const Collection = () => {
                   ref={titleInputRef}
                   type="text"
                   className="form-control"
-                  style={{ outline: 'none' }}
+                  style={{ outline: "none" }}
                   defaultValue={collection.title}
                   id="title"
                   required
@@ -206,7 +206,7 @@ const Collection = () => {
                       <img
                         width="100%"
                         height="180px"
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: "cover" }}
                         className="image-link rounded"
                         src={item.feature_image}
                         alt=""
