@@ -5,9 +5,12 @@ import Button from "@material-ui/core/Button";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
+import { getAllItems } from "api/item";
+import { useHistory } from "react-router-dom";
 
 const AddCollection = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [isValidated, setIsValidated] = useState(false);
   const [image, setImage] = useState(false);
@@ -15,6 +18,14 @@ const AddCollection = () => {
   const titleInputRef = useRef();
   const imageInputRef = useRef();
   const descriptionInputRef = useRef();
+  const [itemsData, setItemsData] = useState([]);
+
+  useEffect(() => {
+    getAllItems().then((response) => {
+      console.log(response.data.items);
+      setItemsData(response.data.items);
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(titleActions.setTitle(" > Thêm mới bộ sưu tập"));
@@ -44,6 +55,10 @@ const AddCollection = () => {
             icon: "success",
             title: "Bộ sưu tập đã được tạo thành công",
             showConfirmButton: true,
+          }).then((response) => {
+            if (response.isConfirmed) {
+              history.push("/admin/collections");
+            }
           });
         }
       });
@@ -98,9 +113,16 @@ const AddCollection = () => {
             required
           />
           {image && (
-            <img src={image} className="w-50 mt-3 rounded shadow-sm" alt="" />
+            <img src={image} className="w-50 mt-3 rounded shadow-sm" alt=""/>
           )}
           <div className="invalid-feedback">Ảnh đại diện là bắt buộc</div>
+        </div>
+        <div className="mb-3">
+          <DialogImageList
+            getAllCheckedItems={getAllCheckedItems}
+            itemsData={itemsData}
+            filterItemList={[]}
+          />
         </div>
       </div>
       <div className="col">
@@ -115,16 +137,11 @@ const AddCollection = () => {
           id="description"
         />
       </div>
-      <div className="col-12 d-flex justify-content-between">
-        <DialogImageList
-          getAllCheckedItems={getAllCheckedItems}
-          filterItemList={[]}
-        />
+      <div className="col-12 d-flex justify-content-end">
         <Button variant="contained" color="primary" type="submit">
           Thêm bộ sưu tập
         </Button>
       </div>
-      <div className="col-12"></div>
     </form>
   );
 };

@@ -15,15 +15,13 @@ import Divider from "@material-ui/core/Divider";
 import Person from "@material-ui/icons/Person";
 
 import Button from "components/CustomButtons/Button.js";
-
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 import { authActions } from "../../store/auth";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
-  const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
   const getName = localStorage.getItem("name");
@@ -43,7 +41,6 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
-    history.push("/admin/user");
   };
 
   const logoutHandler = async () => {
@@ -95,12 +92,14 @@ export default function AdminNavbarLinks() {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Profile
-                    </MenuItem>
+                    <Link to="/admin/user" style={{ color: "#333" }}>
+                      <MenuItem
+                        onClick={handleCloseProfile}
+                        className={classes.dropdownItem}
+                      >
+                        Profile
+                      </MenuItem>
+                    </Link>
                     <Divider light />
                     <MenuItem
                       onClick={logoutHandler}

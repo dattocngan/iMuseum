@@ -1,9 +1,16 @@
-import { getCollection } from "api/collection";
+import {
+  deleteItemOfCollection,
+  getCollection,
+  updateCollection,
+} from "api/collection";
 import DialogImageList from "components/Dialog/DialogImageList";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import Loader from "UI/Loader";
 import Modal from "UI/Modal";
+import Swal from "sweetalert2";
+import { getAllItems } from "../../../api/item";
+import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
 
@@ -18,11 +25,23 @@ const Collection = () => {
   const [deleteItemList, setDeleteItemList] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
 
+  const history = useHistory();
+
   const titleInputRef = useRef();
   const imageInputRef = useRef();
   const descriptionInputRef = useRef();
 
-  const { id: collection_id } = useParams();
+  const {id: collection_id} = useParams();
+
+  const [itemsData, setItemsData] = useState([]);
+
+  useEffect(() => {
+    getAllItems().then((response) => {
+      console.log(response.data.items);
+      setItemsData(response.data.items);
+    });
+  }, []);
+
   useEffect(() => {
     dispatch(titleActions.setTitle(" > Bộ sưu tập"));
     setIsLoading(true);
@@ -54,6 +73,45 @@ const Collection = () => {
         formData.append("itemIdList", item);
       });
     }
+
+    Swal.fire({
+      text:
+        "Bạn có chắc chắn muốn cập nhật thông tin cho bộ sưu tập này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Cập nhật",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+
+        for (const [key, val] of formData.entries()) {
+          console.log(key, ": ", val);
+        }
+
+        updateCollection(collection_id, formData).then((response) => {
+          if (response.status === 200) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: response.data.message,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            history.push("/admin/collections");
+          } else {
+            setIsLoading(false);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Đã có lỗi xảy ra.",
+            });
+          }
+        });
+      }
+    });
   };
 
   const getAllCheckedItems = (data) => setCheckedItems(data);
@@ -77,12 +135,39 @@ const Collection = () => {
   };
 
   const deleteItemHandler = () => {
-    console.log(deleteItemList);
+    const data = {
+      itemIdList: deleteItemList,
+    };
+
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa những hiện vật đã chọn?",
+      text: "Bạn sẽ không thể hoàn tác việc này!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        deleteItemOfCollection(collection_id, data).then((response) => {
+          setIsLoading(false);
+          const copyCollectionItems = [...collection.items];
+          const newCollectionItems = copyCollectionItems.filter((item) => {
+            return !deleteItemList.includes(item.item_id);
+          });
+          setCollection({...collection, items: newCollectionItems});
+          setDeleteItemList([]);
+          Swal.fire("Chúc mừng!", response.data.message, "success");
+        });
+      }
+    });
   };
 
   return (
     <>
-      {isLoading && <Modal children={<Loader />} />}
+      {isLoading && <Modal children={<Loader/>}/>}
       {!isLoading && (
         <div className="row">
           <h3 className="mb-3">Chi tiết bộ sưu tập</h3>
@@ -126,7 +211,7 @@ const Collection = () => {
                   ref={titleInputRef}
                   type="text"
                   className="form-control"
-                  style={{ outline: "none" }}
+                  style={{outline: "none"}}
                   defaultValue={collection.title}
                   id="title"
                   required
@@ -173,10 +258,11 @@ const Collection = () => {
                     <DialogImageList
                       getAllCheckedItems={getAllCheckedItems}
                       filterItemList={collectionItemsIdList}
+                      itemsData={itemsData}
                     />
-                    <button className="btn btn-primary" type="submit">
+                    <Button variant="contained" color="primary" type="submit">
                       Cập nhật bộ sưu tập
-                    </button>
+                    </Button>
                   </div>
                 </>
               )}
@@ -206,11 +292,14 @@ const Collection = () => {
                         </label>
                       </div>
                     )}
+                    {collection.status === 1 && (
+                      <p className="form-label text-black fs-5">{item.name}</p>
+                    )}
                     <Link to={`/admin/items/${item.item_id}`}>
                       <img
                         width="100%"
                         height="180px"
-                        style={{ objectFit: "cover" }}
+                        style={{objectFit: "cover"}}
                         className="image-link rounded"
                         src={item.feature_image}
                         alt=""
@@ -234,7 +323,7 @@ const Collection = () => {
                       }
                       onClick={deleteItemHandler}
                     >
-                      Xóa các ảnh đã chọn
+                      Xóa các hiện vật đã chọn
                     </button>
                   </div>
                 )}
