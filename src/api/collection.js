@@ -26,3 +26,23 @@ export const getCollection = async (collection_id) => {
     return err.response;
   }
 };
+
+export const updateCollection = async (id, data) => {
+  try {
+    const response = await axios.put(`collections/${id}`, data);
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+};
+
+export const deleteItemOfCollection = async (id, data) => {
+  try {
+    const response = await axios.delete(`collections/${id}/items`, {
+      data: data,
+    });
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+};

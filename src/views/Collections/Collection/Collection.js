@@ -1,9 +1,12 @@
+import { updateCollection } from 'api/collection';
+import { deleteItemOfCollection } from 'api/collection';
 import { getCollection } from 'api/collection';
 import DialogImageList from 'components/Dialog/DialogImageList';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import Loader from 'UI/Loader';
 import Modal from 'UI/Modal';
+import Swal from 'sweetalert2';
 
 const Collection = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -13,6 +16,8 @@ const Collection = () => {
   const [image, setImage] = useState(false);
   const [deleteItemList, setDeleteItemList] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
+
+  const history = useHistory();
 
   const titleInputRef = useRef();
   const imageInputRef = useRef();
@@ -50,6 +55,45 @@ const Collection = () => {
         formData.append('itemIdList', item);
       });
     }
+
+    Swal.fire({
+      text:
+        'Bạn có chắc chắn muốn cập nhật thông tin cho bộ sưu tập này không?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cập nhật',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+
+        for (const [key, val] of formData.entries()) {
+          console.log(key, ': ', val);
+        }
+
+        updateCollection(collection_id, formData).then((response) => {
+          if (response.status === 200) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: response.data.message,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            history.push('/admin/collections');
+          } else {
+            setIsLoading(false);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Đã có lỗi xảy ra.',
+            });
+          }
+        });
+      }
+    });
   };
 
   const getAllCheckedItems = (data) => setCheckedItems(data);
@@ -73,7 +117,34 @@ const Collection = () => {
   };
 
   const deleteItemHandler = () => {
-    console.log(deleteItemList);
+    const data = {
+      itemIdList: deleteItemList,
+    };
+
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa những hiện vật đã chọn?',
+      text: 'Bạn sẽ không thể hoàn tác việc này!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        deleteItemOfCollection(collection_id, data).then((response) => {
+          setIsLoading(false);
+          const copyCollectionItems = [...collection.items];
+          const newCollectionItems = copyCollectionItems.filter((item) => {
+            return !deleteItemList.includes(item.item_id);
+          });
+          setCollection({ ...collection, items: newCollectionItems });
+          setDeleteItemList([]);
+          Swal.fire('Chúc mừng!', response.data.message, 'success');
+        });
+      }
+    });
   };
 
   return (
@@ -202,6 +273,9 @@ const Collection = () => {
                         </label>
                       </div>
                     )}
+                    {collection.status === 1 && (
+                      <p className="form-label text-black fs-5">{item.name}</p>
+                    )}
                     <Link to={`/admin/items/${item.item_id}`}>
                       <img
                         width="100%"
@@ -230,7 +304,7 @@ const Collection = () => {
                       }
                       onClick={deleteItemHandler}
                     >
-                      Xóa các ảnh đã chọn
+                      Xóa các hiện vật đã chọn
                     </button>
                   </div>
                 )}

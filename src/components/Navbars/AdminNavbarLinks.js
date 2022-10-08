@@ -1,29 +1,27 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
-import classNames from "classnames";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
 // @material-ui/core components
-import {makeStyles} from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Grow from "@material-ui/core/Grow";
-import Paper from "@material-ui/core/Paper";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Hidden from "@material-ui/core/Hidden";
-import Poppers from "@material-ui/core/Popper";
-import Divider from "@material-ui/core/Divider";
+import { makeStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Hidden from '@material-ui/core/Hidden';
+import Poppers from '@material-ui/core/Popper';
+import Divider from '@material-ui/core/Divider';
 // @material-ui/icons
-import Person from "@material-ui/icons/Person";
+import Person from '@material-ui/icons/Person';
 
-import Button from "components/CustomButtons/Button.js";
+import Button from 'components/CustomButtons/Button.js';
 
-import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
-import {authActions} from "../../store/auth";
-import {useHistory} from "react-router-dom";
+import styles from 'assets/jss/material-dashboard-react/components/headerLinksStyle.js';
+import { authActions } from '../../store/auth';
 
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
-  const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
   const getName = localStorage.getItem('name');
@@ -43,30 +41,31 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
-    history.push('/admin/user');
+    // history.push('/admin/user');
   };
 
   const logoutHandler = async () => {
     localStorage.removeItem('token');
     localStorage.removeItem('name');
     dispatch(authActions.logout());
-  }
-
+  };
 
   return (
     <div className="mt-2">
-      <span className={window.innerWidth > 959 ? "" : "text-white ms-4"}>Xin chào, {name}</span>
+      <span className={window.innerWidth > 959 ? '' : 'text-white ms-4'}>
+        Xin chào, {name}
+      </span>
       <div className={classes.manager}>
         <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
+          color={window.innerWidth > 959 ? 'transparent' : 'white'}
           justIcon={window.innerWidth > 959}
           simple={!(window.innerWidth > 959)}
-          aria-owns={openProfile ? "profile-menu-list-grow" : null}
+          aria-owns={openProfile ? 'profile-menu-list-grow' : null}
           aria-haspopup="true"
           onClick={handleClickProfile}
           className={classes.buttonLink}
         >
-          <Person className={classes.icons}/>
+          <Person className={classes.icons} />
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Profile</p>
           </Hidden>
@@ -77,18 +76,18 @@ export default function AdminNavbarLinks() {
           transition
           disablePortal
           className={
-            classNames({[classes.popperClose]: !openProfile}) +
-            " " +
+            classNames({ [classes.popperClose]: !openProfile }) +
+            ' ' +
             classes.popperNav
           }
         >
-          {({TransitionProps, placement}) => (
+          {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               id="profile-menu-list-grow"
               style={{
                 transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
+                  placement === 'bottom' ? 'center top' : 'center bottom',
               }}
             >
               <Paper>
@@ -100,7 +99,7 @@ export default function AdminNavbarLinks() {
                     >
                       Profile
                     </MenuItem>
-                    <Divider light/>
+                    <Divider light />
                     <MenuItem
                       onClick={logoutHandler}
                       className={classes.dropdownItem}
