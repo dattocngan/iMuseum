@@ -4,8 +4,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loader from "UI/Loader";
 import Modal from "UI/Modal";
+import { useDispatch } from "react-redux";
+import { titleActions } from "../../../store/title";
 
 const Collection = () => {
+  const dispatch = useDispatch();
+
   const [isValidated, setIsValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [collection, setCollection] = useState({});
@@ -19,8 +23,8 @@ const Collection = () => {
   const descriptionInputRef = useRef();
 
   const { id: collection_id } = useParams();
-  // useEffect(() => console.log(collection), [collection]);
   useEffect(() => {
+    dispatch(titleActions.setTitle(" > Bộ sưu tập"));
     setIsLoading(true);
     getCollection(collection_id).then((response) => {
       if (response.status === 200) {
@@ -31,7 +35,7 @@ const Collection = () => {
       }
       setIsLoading(false);
     });
-  }, [collection_id]);
+  }, [collection_id, dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();

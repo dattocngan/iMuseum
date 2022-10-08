@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { addItem, getAges, getMaterials } from "../../../api/item";
 import Loader from "../../../UI/Loader";
-import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import Modal from "../../../UI/Modal";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
+import Editor from "../../../components/Editor/Editor";
+import Swal from "sweetalert2";
 
 function AddItem() {
+  console.log("render add item");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -21,7 +23,7 @@ function AddItem() {
   const dateInputRef = useRef();
   const featureImageInputRef = useRef();
   const imagesInputRef = useRef();
-  const descriptionInputRef = useRef();
+  let description = "";
 
   const [isValidated, setIsValidated] = useState(false);
   const [ages, setAges] = useState([]);
@@ -40,6 +42,10 @@ function AddItem() {
       });
   }, [dispatch]);
 
+  const changeDescriptionHandler = (value) => {
+    description = value;
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -56,7 +62,7 @@ function AddItem() {
     formData.append("ageId", ageInputRef.current.value);
     formData.append("materialId", materialInputRef.current.value);
     formData.append("collected_date", dateInputRef.current.value);
-    formData.append("description", descriptionInputRef.current.value);
+    formData.append("description", description);
     formData.append("feature_image", featureImageInputRef.current.files[0]);
     for (const file of imagesInputRef.current.files) {
       formData.append("images", file);
@@ -210,13 +216,13 @@ function AddItem() {
           <label htmlFor="description" className="form-label">
             Mô tả
           </label>
-          <textarea
-            ref={descriptionInputRef}
-            className="form-control"
-            id="description"
-            rows="7"
-          ></textarea>
-          />
+          {/*<textarea*/}
+          {/*  ref={descriptionInputRef}*/}
+          {/*  className="form-control"*/}
+          {/*  id="description"*/}
+          {/*  rows="7"*/}
+          {/*></textarea>*/}
+          <Editor changeDescriptionHandler={changeDescriptionHandler} />
         </div>
         <div className="col-12">
           <button className="btn btn-primary" type="submit">

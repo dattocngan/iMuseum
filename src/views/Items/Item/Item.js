@@ -10,10 +10,14 @@ import {
 import Modal from "../../../UI/Modal";
 import Loader from "../../../UI/Loader";
 import Swal from "sweetalert2";
+import Editor from "../../../components/Editor/Editor";
+import { useDispatch } from "react-redux";
+import { titleActions } from "../../../store/title";
 
 function Item(props) {
   const id = useParams().id;
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const ageInputRef = useRef();
   const materialInputRef = useRef();
@@ -25,6 +29,7 @@ function Item(props) {
   const featureImageInputRef = useRef();
   const imagesInputRef = useRef();
   const descriptionInputRef = useRef();
+  let description = "";
 
   const [isValidated, setIsValidated] = useState(false);
 
@@ -36,61 +41,25 @@ function Item(props) {
   const [deleteImageList, setDeleteImageList] = useState([]);
 
   useEffect(() => {
+    dispatch(titleActions.setTitle(" > Hiện vật"));
     Promise.all([getAges(), getMaterials(), getItem(id)]).then((responses) => {
       setAges(responses[0].data);
       setMaterials(responses[1].data);
       setItem(responses[2].data.item);
       setIsLoading(false);
     });
-  }, [id]);
+  }, [id, dispatch]);
+
+  const changeDescriptionHandler = (value) => {
+    description = value;
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(description);
     if (!e.target.checkValidity()) {
       return setIsValidated(true);
     }
-
-    // setIsLoading(true);
-    //
-    // const formData = new FormData();
-    //
-    // formData.append('name', nameInputRef.current.value);
-    // formData.append('original', originalInputRef.current.value);
-    // formData.append('dimension', dimensionInputRef.current.value);
-    // formData.append('weight', weightInputRef.current.value);
-    // formData.append('ageId', ageInputRef.current.value);
-    // formData.append('materialId', materialInputRef.current.value);
-    // formData.append('collected_date', dateInputRef.current.value);
-    // formData.append('description', descriptionInputRef.current.value);
-    // if (featureImageInputRef.current.files.length > 0) {
-    //     formData.append('feature_image', featureImageInputRef.current.files[0]);
-    // }
-    // if (imagesInputRef.current.files.length > 0) {
-    //     for (const file of imagesInputRef.current.files) {
-    //         formData.append('images', file);
-    //     }
-    // }
-    //
-    // updateItem(id, formData)
-    //     .then(response => {
-    //         if (response.status === 200) {
-    //             Swal.fire({
-    //                 position: 'top-end',
-    //                 icon: 'success',
-    //                 title: 'Hiện vật của bạn đã được cập nhật',
-    //                 showConfirmButton: false,
-    //                 timer: 2000
-    //             })
-    //             history.push('/')
-    //         } else {
-    //             setIsLoading(false);
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Oops...',
-    //                 text: 'Đã có lỗi xảy ra.'
-    //             })
-    //         }
-    //     });
 
     Swal.fire({
       text: "Bạn có chắc chắn muốn cập nhật thông tin cho hiện vật này không?",
@@ -394,14 +363,20 @@ function Item(props) {
                 <label htmlFor="description" className="form-label">
                   Mô tả
                 </label>
-                <textarea
-                  disabled={item.status}
-                  ref={descriptionInputRef}
-                  className="form-control"
-                  defaultValue={item.description}
-                  id="description"
-                  rows="7"
-                ></textarea>
+                {!!item.status && (
+                  <div className="card">
+                    <div
+                      className="card-body"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    />
+                  </div>
+                )}
+                {!item.status && (
+                  <Editor
+                    value={item.description}
+                    changeDescriptionHandler={changeDescriptionHandler}
+                  />
+                )}
               </div>
               {!item.status && (
                 <div className="col-12">
