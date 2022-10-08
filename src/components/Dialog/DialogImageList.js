@@ -6,12 +6,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogListAllItems from "./DialogListAllItems";
 import { useState } from "react";
 
-let checkedItemsCount = [];
-
-const DialogImageList = ({ getAllCheckedItems }) => {
+const DialogImageList = ({ getAllCheckedItems, itemsData }) => {
+  let checkedItemsCount = [];
   const [open, setOpen] = React.useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
-
   const getCheckedItems = (data) => {
     checkedItemsCount = data;
   };
@@ -64,7 +62,10 @@ const DialogImageList = ({ getAllCheckedItems }) => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">Chọn hiện vật</DialogTitle>
-        <DialogListAllItems getCheckedItems={getCheckedItems} />
+        <DialogListAllItems
+          getCheckedItems={getCheckedItems}
+          itemsData={itemsData}
+        />
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel

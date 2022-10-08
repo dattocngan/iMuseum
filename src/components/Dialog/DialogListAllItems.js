@@ -2,8 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
 import { useState } from "react";
-import { useEffect } from "react";
-import { getAllItems } from "api/item";
 import { FavoriteBorder, Favorite } from "@material-ui/icons";
 import { Checkbox } from "@material-ui/core";
 
@@ -31,17 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DialogListAllItems = ({ getCheckedItems }) => {
+const DialogListAllItems = ({ getCheckedItems, itemsData }) => {
   const classes = useStyles();
-  const [itemData, setItemData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
-
-  useEffect(() => {
-    getAllItems().then((response) => {
-      // console.log(response.data.items);
-      setItemData(response.data.items);
-    });
-  }, []);
 
   const addCheckedItems = (id) => {
     const copyCheckedItems = [...checkedItems];
@@ -57,7 +47,7 @@ const DialogListAllItems = ({ getCheckedItems }) => {
   return (
     <div className={classes.root}>
       <ImageList rowHeight={200} gap={3} className={classes.imageList}>
-        {itemData.map((item, index) => (
+        {itemsData.map((item, index) => (
           <ImageListItem
             key={item.item_id}
             cols={index % 3 !== 2 ? 1 : 2}
