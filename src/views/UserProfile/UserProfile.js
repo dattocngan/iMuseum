@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import Loader from 'UI/Loader';
 import Modal from 'UI/Modal';
 import Swal from 'sweetalert2';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { TextField } from '@material-ui/core';
+import dayjs from 'dayjs';
 
 export default function UserProfile() {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -12,10 +17,11 @@ export default function UserProfile() {
     mobile: '',
     email: '',
     address: '',
-    birthday: '2015-12-31',
+    birthday: '',
     sex: null,
     introduction: '',
   });
+  const [birthday, setBirthday] = useState(dayjs('2015-12-31'));
 
   const [passwordInput, setPasswordInput] = useState({
     oldPassword: '',
@@ -33,23 +39,30 @@ export default function UserProfile() {
         : false
     );
   }, [passwordInput.newPassword, passwordInput.confirmPassword]);
+
   useEffect(() => {
     setIsLoadingDataFromDb(true);
     getCollectorInformation().then((response) => {
       if (response.status === 200) {
+        console.log(response.data.birth_date);
         setProfileInput({
           fullname: response.data.full_name || '',
           mobile: response.data.mobile || '',
           email: response.data.email || '',
           address: response.data.address || '',
-          birthday: response.data.birth_date || '2015-12-31',
+          birthday: response.data.birth_date || '',
           sex: String(response.data.sex !== null ? response.data.sex : '0'),
           introduction: response.data.introduction || '',
         });
+        setBirthday(dayjs(response.data.birth_date || '2015-12-31'));
       }
       setIsLoadingDataFromDb(false);
     });
   }, []);
+
+  const handleChangeBirthday = (newValue) => {
+    setBirthday(newValue);
+  };
 
   const onChangeProfileInput = (e) => {
     setProfileInput({
@@ -64,7 +77,6 @@ export default function UserProfile() {
       [e.target.name]: e.target.value,
     });
   };
-
   const submitHandler = (e) => {
     e.preventDefault();
     setIsValidated(true);
@@ -74,18 +86,19 @@ export default function UserProfile() {
 
     if (!isChangingPassword) {
       setIsLoading(true);
+      console.log(birthday);
       updateCollectorInformation({
         fullname: profileInput.fullname,
         mobile: profileInput.mobile,
         email: profileInput.email,
         address: profileInput.address,
-        birth_date: profileInput.birthday,
+        birth_date: new Date(birthday.$d),
         sex: profileInput.sex,
         introduction: profileInput.introduction,
       }).then((response) => {
         setIsLoading(false);
         if (response.status === 200) {
-          Swal.fire('Good job!', response.data.message, 'success');
+          Swal.fire('Thành công!', response.data.message, 'success');
         } else {
           Swal.fire({
             icon: 'error',
@@ -106,7 +119,7 @@ export default function UserProfile() {
         console.log(response);
         setIsLoading(false);
         if (response.status === 200) {
-          Swal.fire('Good job!', response.data.message, 'success');
+          Swal.fire('Thành công!', response.data.message, 'success');
           setPasswordInput({
             oldPassword: '',
             newPassword: '',
@@ -210,17 +223,20 @@ export default function UserProfile() {
           </div>
 
           <div className="col-md-4">
-            <label htmlFor="date" className="form-label">
+            <label htmlFor="address" className="form-label">
               Ngày sinh
             </label>
-            <input
-              type="date"
-              className="form-control"
-              name="birthday"
-              id="date"
-              value={profileInput.birthday}
-              onChange={onChangeProfileInput}
-            />
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DesktopDatePicker
+                  label=""
+                  inputFormat="DD/MM/YYYY"
+                  value={birthday}
+                  onChange={handleChangeBirthday}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </div>
           </div>
 
           <div>
