@@ -1,18 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   deleteImages,
   getAges,
   getItem,
   getMaterials,
   updateItem,
-} from "../../../api/item";
-import Modal from "../../../UI/Modal";
-import Loader from "../../../UI/Loader";
-import Swal from "sweetalert2";
-import Editor from "../../../components/Editor/Editor";
-import { useDispatch } from "react-redux";
-import { titleActions } from "../../../store/title";
+} from '../../../api/item';
+import Modal from '../../../UI/Modal';
+import Loader from '../../../UI/Loader';
+import Swal from 'sweetalert2';
+import Editor from '../../../components/Editor/Editor';
+import { useDispatch } from 'react-redux';
+import { titleActions } from '../../../store/title';
+import ItemImage from './ItemImage';
 
 function Item(props) {
   const id = useParams().id;
@@ -29,7 +30,7 @@ function Item(props) {
   const featureImageInputRef = useRef();
   const imagesInputRef = useRef();
   const descriptionInputRef = useRef();
-  let description = "";
+  let description = '';
 
   const [isValidated, setIsValidated] = useState(false);
 
@@ -39,9 +40,10 @@ function Item(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   const [deleteImageList, setDeleteImageList] = useState([]);
+  const [showImage, setShowImage] = useState(false);
 
   useEffect(() => {
-    dispatch(titleActions.setTitle(" > Hiện vật"));
+    dispatch(titleActions.setTitle(' > Hiện vật'));
     Promise.all([getAges(), getMaterials(), getItem(id)]).then((responses) => {
       setAges(responses[0].data);
       setMaterials(responses[1].data);
@@ -54,6 +56,10 @@ function Item(props) {
     description = value;
   };
 
+  const showImageHandler = (src) => {
+    setShowImage(src);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     console.log(description);
@@ -62,34 +68,34 @@ function Item(props) {
     }
 
     Swal.fire({
-      text: "Bạn có chắc chắn muốn cập nhật thông tin cho hiện vật này không?",
-      icon: "warning",
+      text: 'Bạn có chắc chắn muốn cập nhật thông tin cho hiện vật này không?',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Cập nhật",
-      cancelButtonText: "Hủy",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cập nhật',
+      cancelButtonText: 'Hủy',
     }).then((result) => {
       if (result.isConfirmed) {
         const formData = new FormData();
 
-        formData.append("name", nameInputRef.current.value);
-        formData.append("original", originalInputRef.current.value);
-        formData.append("dimension", dimensionInputRef.current.value);
-        formData.append("weight", weightInputRef.current.value);
-        formData.append("ageId", ageInputRef.current.value);
-        formData.append("materialId", materialInputRef.current.value);
-        formData.append("collected_date", dateInputRef.current.value);
-        formData.append("description", descriptionInputRef.current.value);
+        formData.append('name', nameInputRef.current.value);
+        formData.append('original', originalInputRef.current.value);
+        formData.append('dimension', dimensionInputRef.current.value);
+        formData.append('weight', weightInputRef.current.value);
+        formData.append('ageId', ageInputRef.current.value);
+        formData.append('materialId', materialInputRef.current.value);
+        formData.append('collected_date', dateInputRef.current.value);
+        formData.append('description', descriptionInputRef.current.value);
         if (featureImageInputRef.current.files.length > 0) {
           formData.append(
-            "feature_image",
+            'feature_image',
             featureImageInputRef.current.files[0]
           );
         }
         if (imagesInputRef.current.files.length > 0) {
           for (const file of imagesInputRef.current.files) {
-            formData.append("images", file);
+            formData.append('images', file);
           }
         }
 
@@ -98,19 +104,19 @@ function Item(props) {
         updateItem(id, formData).then((response) => {
           if (response.status === 200) {
             Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Hiện vật của bạn đã được cập nhật",
+              position: 'top-end',
+              icon: 'success',
+              title: 'Hiện vật của bạn đã được cập nhật',
               showConfirmButton: false,
               timer: 2000,
             });
-            history.push("/");
+            history.push('/');
           } else {
             setIsLoading(false);
             Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Đã có lỗi xảy ra.",
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Đã có lỗi xảy ra.',
             });
           }
         });
@@ -133,14 +139,14 @@ function Item(props) {
 
   function deleteImagesHandler() {
     Swal.fire({
-      title: "Bạn có chắc chắn muốn xóa những tấm ảnh đã chọn?",
-      text: "Bạn sẽ không thể hoàn tác việc này!",
-      icon: "warning",
+      title: 'Bạn có chắc chắn muốn xóa những tấm ảnh đã chọn?',
+      text: 'Bạn sẽ không thể hoàn tác việc này!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
     }).then((result) => {
       if (result.isConfirmed) {
         deleteImages(id, {
@@ -154,9 +160,9 @@ function Item(props) {
           setItem(newItem);
           setDeleteImageList([]);
           Swal.fire(
-            "Đã xóa!",
-            "Các ảnh của bạn đã được xóa thành công!",
-            "success"
+            'Đã xóa!',
+            'Các ảnh của bạn đã được xóa thành công!',
+            'success'
           );
         });
       }
@@ -166,6 +172,14 @@ function Item(props) {
   return (
     <>
       {isLoading && <Modal children={<Loader />} />}
+      {!isLoading && showImage && (
+        <Modal handleCloseModal={() => setShowImage(false)}>
+          <ItemImage
+            imageSrc={showImage}
+            handleCloseModal={() => setShowImage(false)}
+          />
+        </Modal>
+      )}
       {!isLoading && (
         <div className="row">
           <h3 className="mb-3">Chi tiết hiện vật</h3>
@@ -179,14 +193,14 @@ function Item(props) {
           </div>
           <div className="col-md-8">
             <h5>
-              <span className="fw-bold">Trạng thái:</span>{" "}
-              <span className={item.status ? "text-success" : "text-danger"}>
-                {item.status ? "Đã được duyệt" : "Chưa được duyệt"}
+              <span className="fw-bold">Trạng thái:</span>{' '}
+              <span className={item.status ? 'text-success' : 'text-danger'}>
+                {item.status ? 'Đã được duyệt' : 'Chưa được duyệt'}
               </span>
             </h5>
             <form
               className={`row g-3 needs-validation ${
-                isValidated ? "was-validated" : ""
+                isValidated ? 'was-validated' : ''
               }`}
               noValidate
               onSubmit={submitHandler}
@@ -200,7 +214,7 @@ function Item(props) {
                   ref={nameInputRef}
                   type="text"
                   className="form-control"
-                  style={{ outline: "none" }}
+                  style={{ outline: 'none' }}
                   defaultValue={item.name}
                   id="name"
                   required
@@ -265,7 +279,7 @@ function Item(props) {
                       ref={ageInputRef}
                       className="form-select"
                       id="age"
-                      defaultValue={item.ageId || ""}
+                      defaultValue={item.ageId || ''}
                       required
                     >
                       <option value="" disabled>
@@ -300,7 +314,7 @@ function Item(props) {
                       ref={materialInputRef}
                       className="form-select"
                       id="material"
-                      defaultValue={item.materialId || ""}
+                      defaultValue={item.materialId || ''}
                       required
                     >
                       <option value="" disabled>
@@ -329,7 +343,7 @@ function Item(props) {
                   type="date"
                   className="form-control"
                   id="date"
-                  defaultValue={item.collected_date || "2015-12-31"}
+                  defaultValue={item.collected_date || '2015-12-31'}
                 />
               </div>
               {!item.status && (
@@ -394,7 +408,7 @@ function Item(props) {
             {item.images.length > 0 && (
               <>
                 {item.images.map((image) => (
-                  <div key={image.image_id} className="col-md-3 mt-5">
+                  <div key={image.image_id} className="col-md-4 mt-5">
                     {!item.status && (
                       <div className="form-check">
                         <input
@@ -406,9 +420,12 @@ function Item(props) {
                     )}
                     <img
                       width="100%"
-                      className="rounded"
+                      height="180px"
+                      className="image-link rounded"
+                      style={{ objectFit: 'cover' }}
                       src={image.url}
                       alt=""
+                      onClick={showImageHandler.bind(null, image.url)}
                     />
                   </div>
                 ))}
