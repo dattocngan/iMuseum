@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 import "assets/css/material-dashboard-react.css?v=1.10.0";
 import axios from "axios";
 import store from "./store";
-import {authActions} from "./store/auth";
+import { authActions } from "./store/auth";
 import App from "App";
 
 /** Intercept any unauthorized request.
  * dispatch logout action accordingly **/
-axios.defaults.baseURL = "http://localhost:8080/v1/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const UNAUTHORIZED = 401;
 const { dispatch } = store; // direct access to redux store.
 
