@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -14,30 +14,35 @@ import routes from "../../routes";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/bao-tang-da-nang.png";
+import Modal from "../../UI/Modal";
+import Loader from "../../UI/Loader";
 
 let ps;
 
 const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/admin" to="/admin/items" />
-  </Switch>
+  <Suspense fallback={<Modal children={<Loader/>}/>}>
+    <Switch>
+      {routes.map((prop, key) => {
+        if (prop.layout === "/admin") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        }
+        return null;
+      })}
+      <Redirect from="/admin" to="/admin/items"/>
+    </Switch>
+  </Suspense>
+
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+export default function Admin({...rest}) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices

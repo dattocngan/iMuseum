@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import Admin from "layouts/Admin/Admin";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Auth from "layouts/Auth/Auth";
 import { authActions } from "./store/auth";
 import { useJwt } from "react-jwt";
 import { setHeader } from "./api/http";
+import Modal from "./UI/Modal";
+import Loader from "./UI/Loader";
+
+const Admin = lazy(() => import("layouts/Admin/Admin"));
+
+const Auth = lazy(() => import("layouts/Auth/Auth"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,12 +28,14 @@ const App = () => {
   }, [token, isExpired, decodedToken?.name, dispatch]);
 
   return (
-    <Switch>
-      {!isAuth && isAuth !== null && <Route path="/auth" component={Auth} />}
-      {!isAuth && isAuth !== null && <Redirect from="/" to="/auth/login" />}
-      {isAuth && <Route path="/admin" component={Admin} />}
-      {isAuth && <Redirect from="/" to="/admin/items" />}
-    </Switch>
+    <Suspense fallback={<Modal children={<Loader />} />}>
+      <Switch>
+        {!isAuth && isAuth !== null && <Route path="/auth" component={Auth} />}
+        {!isAuth && isAuth !== null && <Redirect from="/" to="/auth/login" />}
+        {isAuth && <Route path="/admin" component={Admin} />}
+        {isAuth && <Redirect from="/" to="/admin/items" />}
+      </Switch>
+    </Suspense>
   );
 };
 

@@ -20,8 +20,6 @@ const useStyles = makeStyles(styles);
 export default function Header(props) {
   const title = useSelector((state) => state.title);
 
-  console.log(title);
-
   const classes = useStyles();
   const { color } = props;
   const appBarClasses = classNames({

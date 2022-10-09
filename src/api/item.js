@@ -3,7 +3,7 @@ import axios from "axios";
 export const getItems = async (page) => {
   try {
     let url = "items";
-    url += page ? `?page=${page}` : "";
+    url += page !== undefined ? `?page=${page}` : "";
     const response = await axios.get(url);
     return response;
   } catch (err) {
@@ -82,4 +82,3 @@ export const getAllItems = async () => {
     return err.response;
   }
 };
-
