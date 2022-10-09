@@ -45,7 +45,6 @@ export default function UserProfile() {
     setIsLoadingDataFromDb(true);
     getCollectorInformation().then((response) => {
       if (response.status === 200) {
-        console.log(response.data.birth_date);
         setProfileInput({
           fullname: response.data.full_name || "",
           mobile: response.data.mobile || "",
