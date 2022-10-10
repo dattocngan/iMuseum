@@ -26,7 +26,25 @@ const AddCollection = () => {
 
   useEffect(() => {
     getAllItems().then((response) => {
-      setItemsData(response.data.items);
+      if (response.status === 200) {
+        if (!response.data.items.length) {
+          Swal.fire({
+            icon: "error",
+            title: "Chưa có hiện vật",
+            text: "Bạn cần tạo hiện vật để thêm vào bộ sưu tập.",
+            confirmButtonText: "Tạo hiện vật",
+          }).then(() => {
+            history.push("/admin/items/add");
+          });
+        }
+        setItemsData(response.data.items);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Đã có lõi xảy ra.",
+        });
+      }
     });
   }, []);
 
@@ -96,6 +114,7 @@ const AddCollection = () => {
         noValidate
         onSubmit={submitHandler}
       >
+        <h3>Thêm bộ sưu tập</h3>
         <div className="col">
           <div className="mb-3">
             <label htmlFor="title" className="form-label">

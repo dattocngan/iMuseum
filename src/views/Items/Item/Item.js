@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   deleteImages,
@@ -14,11 +14,16 @@ import Editor from "../../../components/Editor/Editor";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
 import ItemImage from "./ItemImage";
+import dayjs from "dayjs";
+import Date from "components/Date/Date";
 
 function Item(props) {
   const id = useParams().id;
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const [date, setDate] = useState(dayjs(""));
+  const [description, setDescription] = useState("");
 
   const ageInputRef = useRef();
   const materialInputRef = useRef();
@@ -26,10 +31,8 @@ function Item(props) {
   const originalInputRef = useRef();
   const dimensionInputRef = useRef();
   const weightInputRef = useRef();
-  const dateInputRef = useRef();
   const featureImageInputRef = useRef();
   const imagesInputRef = useRef();
-  let description = "";
 
   const [isValidated, setIsValidated] = useState(false);
 
@@ -47,12 +50,17 @@ function Item(props) {
       setAges(responses[0].data);
       setMaterials(responses[1].data);
       setItem(responses[2].data.item);
+      setDate(responses[2].data.item.collected_date);
       setIsLoading(false);
     });
   }, [id, dispatch]);
 
-  const changeDescriptionHandler = (value) => {
-    description = value;
+  const changeDescriptionHandler = useCallback((value) => {
+    setDescription(value);
+  }, []);
+
+  const handleChangeDate = (newValue) => {
+    setDate(newValue);
   };
 
   const showImageHandler = (src) => {
@@ -84,7 +92,7 @@ function Item(props) {
         formData.append("weight", weightInputRef.current.value);
         formData.append("ageId", ageInputRef.current.value);
         formData.append("materialId", materialInputRef.current.value);
-        formData.append("collected_date", dateInputRef.current.value);
+        formData.append("collected_date", date);
         formData.append("description", description);
         if (featureImageInputRef.current.files.length > 0) {
           formData.append(
@@ -332,7 +340,7 @@ function Item(props) {
                   </>
                 )}
               </div>
-              <div className="col-md-3">
+              {/* <div className="col-md-3">
                 <label htmlFor="date" className="form-label">
                   Ngày thu thập:
                 </label>
@@ -344,7 +352,13 @@ function Item(props) {
                   id="date"
                   defaultValue={item.collected_date || "2015-12-31"}
                 />
-              </div>
+              </div> */}
+              <Date
+                className="col-md-3"
+                date={date}
+                handleChange={handleChangeDate}
+                label="Ngày thu thập"
+              />
               {!item.status && (
                 <>
                   <div className="col-md-6">
@@ -419,7 +433,7 @@ function Item(props) {
                     )}
                     <img
                       width="100%"
-                      height="180px"
+                      height="220px"
                       className="image-link rounded"
                       style={{ objectFit: "cover" }}
                       src={image.url}

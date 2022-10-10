@@ -4,6 +4,8 @@ import ReactPaginate from "react-paginate";
 import { getCollections } from "../../api/collection";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../store/title";
+import Modal from "UI/Modal";
+import Loader from "UI/Loader";
 
 function AllCollections() {
   const dispatch = useDispatch();

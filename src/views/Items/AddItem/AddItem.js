@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { addItem, getAges, getMaterials } from "../../../api/item";
 import Loader from "../../../UI/Loader";
@@ -8,10 +8,15 @@ import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
 import Editor from "../../../components/Editor/Editor";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
+import Date from "components/Date/Date";
 
 function AddItem() {
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const [date, setDate] = useState(dayjs(""));
+  const [description, setDescription] = useState("");
 
   const ageInputRef = useRef();
   const materialInputRef = useRef();
@@ -19,10 +24,8 @@ function AddItem() {
   const originalInputRef = useRef();
   const dimensionInputRef = useRef();
   const weightInputRef = useRef();
-  const dateInputRef = useRef();
   const featureImageInputRef = useRef();
   const imagesInputRef = useRef();
-  let description = "";
 
   const [isValidated, setIsValidated] = useState(false);
   const [ages, setAges] = useState([]);
@@ -41,8 +44,12 @@ function AddItem() {
       });
   }, [dispatch]);
 
-  const changeDescriptionHandler = (value) => {
-    description = value;
+  const changeDescriptionHandler = useCallback((value) => {
+    setDescription(value);
+  }, []);
+
+  const handleChangeDate = (newValue) => {
+    setDate(newValue);
   };
 
   const submitHandler = (e) => {
@@ -61,7 +68,7 @@ function AddItem() {
     formData.append("weight", weightInputRef.current.value);
     formData.append("ageId", ageInputRef.current.value);
     formData.append("materialId", materialInputRef.current.value);
-    formData.append("collected_date", dateInputRef.current.value);
+    formData.append("collected_date", date);
     formData.append("description", description);
     formData.append("feature_image", featureImageInputRef.current.files[0]);
     for (const file of imagesInputRef.current.files) {
@@ -84,6 +91,7 @@ function AddItem() {
         noValidate
         onSubmit={submitHandler}
       >
+        <h3>Thêm hiện vật</h3>
         <div className="col-md-4">
           <label htmlFor="name" className="form-label">
             Tên hiện vật:
@@ -175,18 +183,12 @@ function AddItem() {
           </select>
           <div className="invalid-feedback">Niên đại là bắt buộc</div>
         </div>
-        <div className="col-md-3">
-          <label htmlFor="date" className="form-label">
-            Ngày thu thập:
-          </label>
-          <input
-            ref={dateInputRef}
-            type="date"
-            className="form-control"
-            id="date"
-            defaultValue="2015-12-31"
-          />
-        </div>
+        <Date
+          className="col-md-3"
+          date={date}
+          handleChange={handleChangeDate}
+          label="Ngày thu thập"
+        />
         <div className="col-md-6">
           <label htmlFor="feature_image" className="form-label">
             Ảnh đại diện hiện vật:

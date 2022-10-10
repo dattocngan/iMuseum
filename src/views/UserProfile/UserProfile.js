@@ -3,13 +3,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import Loader from "UI/Loader";
 import Modal from "UI/Modal";
 import Swal from "sweetalert2";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TextField } from "@material-ui/core";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../store/title";
 import Editor from "components/Editor/Editor";
+import Date from "components/Date/Date";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
@@ -67,6 +65,7 @@ export default function UserProfile() {
   }, []);
 
   const handleChangeBirthday = (newValue) => {
+    console.log(newValue);
     setBirthday(newValue);
   };
 
@@ -97,7 +96,7 @@ export default function UserProfile() {
         mobile: profileInput.mobile,
         email: profileInput.email,
         address: profileInput.address,
-        birth_date: birthday.$d ? new Date(birthday.$d) : "",
+        birth_date: birthday,
         sex: profileInput.sex,
         introduction: introduction, //cai nay la dung cua editor
       }).then((response) => {
@@ -232,22 +231,12 @@ export default function UserProfile() {
             />
           </div>
 
-          <div className="col-md-4">
-            <label htmlFor="address" className="form-label">
-              Ngày sinh
-            </label>
-            <div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DesktopDatePicker
-                  label=""
-                  inputFormat="DD/MM/YYYY"
-                  value={birthday}
-                  onChange={handleChangeBirthday}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </div>
-          </div>
+          <Date
+            className="col-md-4"
+            date={birthday}
+            handleChange={handleChangeBirthday}
+            label="Ngày sinh"
+          />
 
           <div>
             <p className="mb-1">Giới tính</p>
