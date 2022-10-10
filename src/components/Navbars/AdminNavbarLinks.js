@@ -97,7 +97,7 @@ export default function AdminNavbarLinks() {
                         onClick={handleCloseProfile}
                         className={classes.dropdownItem}
                       >
-                        Profile
+                        Thông tin cá nhân
                       </MenuItem>
                     </Link>
                     <Divider light />
@@ -105,7 +105,7 @@ export default function AdminNavbarLinks() {
                       onClick={logoutHandler}
                       className={classes.dropdownItem}
                     >
-                      Logout
+                      Đăng xuất
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

@@ -1,5 +1,5 @@
 import { getCollectorInformation, updateCollectorInformation } from "api/http";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Loader from "UI/Loader";
 import Modal from "UI/Modal";
 import Swal from "sweetalert2";
@@ -9,6 +9,7 @@ import { TextField } from "@material-ui/core";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../store/title";
+import Editor from "components/Editor/Editor";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
@@ -20,11 +21,12 @@ export default function UserProfile() {
     mobile: "",
     email: "",
     address: "",
-    birthday: "2015-12-31",
+    birthday: "",
     sex: null,
     introduction: "",
   });
-  const [birthday, setBirthday] = useState(dayjs("2015-12-31"));
+  const [introduction, setIntroduction] = useState("");
+  const [birthday, setBirthday] = useState(dayjs(""));
 
   const [passwordInput, setPasswordInput] = useState({
     oldPassword: "",
@@ -50,14 +52,18 @@ export default function UserProfile() {
           mobile: response.data.mobile || "",
           email: response.data.email || "",
           address: response.data.address || "",
-          birthday: response.data.birth_date || "2015-12-31",
+          birthday: response.data.birth_date || "",
           sex: String(response.data.sex !== null ? response.data.sex : "0"),
           introduction: response.data.introduction || "",
         });
-        setBirthday(dayjs(response.data.birth_date || "2015-12-31"));
+        setBirthday(dayjs(response.data.birth_date || ""));
       }
       setIsLoadingDataFromDb(false);
     });
+  }, []);
+
+  const changeIntroductionHandler = useCallback((value) => {
+    setIntroduction(value);
   }, []);
 
   const handleChangeBirthday = (newValue) => {
@@ -79,22 +85,21 @@ export default function UserProfile() {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    setIsValidated(true);
+    console.log(introduction);
     if (!e.target.checkValidity()) {
-      return;
+      return setIsValidated(true);
     }
 
     if (!isChangingPassword) {
       setIsLoading(true);
-      console.log(birthday);
       updateCollectorInformation({
-        fullname: profileInput.fullname,
+        full_name: profileInput.fullname,
         mobile: profileInput.mobile,
         email: profileInput.email,
         address: profileInput.address,
-        birth_date: new Date(birthday.$d),
+        birth_date: birthday.$d ? new Date(birthday.$d) : "",
         sex: profileInput.sex,
-        introduction: profileInput.introduction,
+        introduction: introduction, //cai nay la dung cua editor
       }).then((response) => {
         setIsLoading(false);
         if (response.status === 200) {
@@ -103,7 +108,7 @@ export default function UserProfile() {
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: response.data.message,
+            text: "Đã có lỗi xảy ra.",
           });
         }
       });
@@ -158,7 +163,9 @@ export default function UserProfile() {
       </div>
       {!isLoadingDataFromDb && !isChangingPassword && (
         <form
-          className={`row g-3 needs-validation`}
+          className={`row g-3 needs-validation ${
+            isValidated ? "was-validated" : ""
+          }`}
           noValidate
           onSubmit={submitHandler}
         >
@@ -174,7 +181,9 @@ export default function UserProfile() {
               placeholder="Họ và tên..."
               value={profileInput.fullname}
               onChange={onChangeProfileInput}
+              required
             />
+            <div className="invalid-feedback">Tên người dùng là bắt buộc</div>
           </div>
 
           <div className="col-md-3">
@@ -189,6 +198,7 @@ export default function UserProfile() {
               placeholder="Số điện thoại..."
               value={profileInput.mobile}
               onChange={onChangeProfileInput}
+              disabled
             />
           </div>
 
@@ -275,15 +285,10 @@ export default function UserProfile() {
             <label htmlFor="introduction" className="form-label">
               Giới thiệu
             </label>
-            <textarea
-              type="text"
-              className="form-control w-100"
-              name="introduction"
-              id="introduction"
-              placeholder="Một vài thông tin về bản thân..."
-              style={{ height: "150px" }}
-              onChange={onChangeProfileInput}
+            <Editor
               value={profileInput.introduction}
+              changeDescriptionHandler={changeIntroductionHandler}
+              placeholder="Vài dòng giới thiệu bản thân..."
             />
           </div>
           <div className="col-12">

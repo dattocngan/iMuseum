@@ -34,7 +34,7 @@ export const verify = async (value) => {
 
 export const refreshOtp = async (value) => {
   try {
-    const response = await axios.post("auth/signup/verify", value);
+    const response = await axios.post("auth/signup/refreshOTP", value);
     return response;
   } catch (err) {
     return err.response;

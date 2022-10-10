@@ -35,11 +35,6 @@ function Verify() {
     }
     setErrorOTP(false);
     try {
-      // const response = await axios.post('auth/signup/verify', {
-      //     mobile: mobile,
-      //     otp: enteredOTP
-      // });
-
       const response = await verify({
         mobile: mobile,
         otp: enteredOTP,
@@ -112,11 +107,11 @@ function Verify() {
               )}
             </div>
             <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-block">
+              <button type="submit" className="btn btn-primary btn-block mt-3">
                 Xác thực
               </button>
             </div>
-            <div className="form-group d-flex">
+            <div className="form-group d-flex mt-3">
               <button
                 disabled={refreshOTP}
                 type="button"

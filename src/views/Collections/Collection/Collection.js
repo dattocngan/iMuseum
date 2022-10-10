@@ -13,6 +13,7 @@ import { getAllItems } from "../../../api/item";
 import Button from "@material-ui/core/Button";
 import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
+import Editor from "components/Editor/Editor";
 
 const Collection = () => {
   const dispatch = useDispatch();
@@ -29,9 +30,9 @@ const Collection = () => {
 
   const titleInputRef = useRef();
   const imageInputRef = useRef();
-  const descriptionInputRef = useRef();
+  let description = "";
 
-  const {id: collection_id} = useParams();
+  const { id: collection_id } = useParams();
 
   const [itemsData, setItemsData] = useState([]);
 
@@ -56,6 +57,10 @@ const Collection = () => {
     });
   }, [collection_id, dispatch]);
 
+  const changeDescriptionHandler = (value) => {
+    description = value;
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
     setIsValidated(true);
@@ -64,7 +69,7 @@ const Collection = () => {
     }
     const formData = new FormData();
     formData.append("title", titleInputRef.current.value);
-    formData.append("description", descriptionInputRef.current.value);
+    formData.append("description", description);
     if (imageInputRef.current.files.length > 0) {
       formData.append("image", imageInputRef.current.files[0]);
     }
@@ -157,7 +162,7 @@ const Collection = () => {
           const newCollectionItems = copyCollectionItems.filter((item) => {
             return !deleteItemList.includes(item.item_id);
           });
-          setCollection({...collection, items: newCollectionItems});
+          setCollection({ ...collection, items: newCollectionItems });
           setDeleteItemList([]);
           Swal.fire("Chúc mừng!", response.data.message, "success");
         });
@@ -167,7 +172,7 @@ const Collection = () => {
 
   return (
     <>
-      {isLoading && <Modal children={<Loader/>}/>}
+      {isLoading && <Modal children={<Loader />} />}
       {!isLoading && (
         <div className="row">
           <h3 className="mb-3">Chi tiết bộ sưu tập</h3>
@@ -211,7 +216,7 @@ const Collection = () => {
                   ref={titleInputRef}
                   type="text"
                   className="form-control"
-                  style={{outline: "none"}}
+                  style={{ outline: "none" }}
                   defaultValue={collection.title}
                   id="title"
                   required
@@ -242,14 +247,22 @@ const Collection = () => {
                 <label htmlFor="description" className="form-label">
                   Mô tả
                 </label>
-                <textarea
-                  disabled={collection.status}
-                  ref={descriptionInputRef}
-                  className="form-control"
-                  defaultValue={collection.description}
-                  id="description"
-                  rows="7"
-                ></textarea>
+                {!!collection.status && (
+                  <div className="card">
+                    <div
+                      className="card-body"
+                      dangerouslySetInnerHTML={{
+                        __html: collection.description,
+                      }}
+                    />
+                  </div>
+                )}
+                {!collection.status && (
+                  <Editor
+                    value={collection.description}
+                    changeDescriptionHandler={changeDescriptionHandler}
+                  />
+                )}
               </div>
 
               {!collection.status && (
@@ -299,7 +312,7 @@ const Collection = () => {
                       <img
                         width="100%"
                         height="180px"
-                        style={{objectFit: "cover"}}
+                        style={{ objectFit: "cover" }}
                         className="image-link rounded"
                         src={item.feature_image}
                         alt=""

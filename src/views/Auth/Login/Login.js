@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import classes from "./Login.module.css";
 import { login, setHeader } from "../../../api/http";
 import { authActions } from "../../../store/auth";
+import Modal from "UI/Modal";
+import Loader from "UI/Loader";
 
 function Login() {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ function Login() {
   const [errorPhone, setErrorPhone] = useState();
   const [errorPassword, setErrorPassword] = useState();
   const [invalidForm, setInvalidForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function onlyNumbers(str) {
     return /^[0-9]+$/.test(str);
@@ -45,11 +48,15 @@ function Login() {
     }
     setErrorPassword();
 
+    setIsLoading(true);
+
     try {
       const response = await login({
         mobile: enteredPhone,
         password: enteredPassword,
       });
+
+      setIsLoading(false);
 
       if (response.status === 200) {
         setHeader(response.data.token);
@@ -64,55 +71,63 @@ function Login() {
   };
 
   return (
-    <div className={classes.layout}>
-      <div className="card">
-        {invalidForm && (
-          <span className={`text-center mt-2 ${classes.invalid}`}>
-            SĐT hoặc mật khẩu không đúng
-          </span>
-        )}
-        <article className="card-body">
-          <Link to="/auth/signup" className="float-end btn btn-outline-primary">
-            Đăng kí
-          </Link>
-          <h4 className="card-title mb-4 mt-1">iMuseum</h4>
-          <form onSubmit={submitFormHandler}>
-            <div className="form-group">
-              <label>Số điện thoại</label>
-              <input
-                name="phone"
-                className="form-control"
-                type="tel"
-                ref={phoneInputRef}
-                maxLength={10}
-                width={10}
-              />
-              {!!errorPhone && <p className={classes.invalid}>{errorPhone}</p>}
-            </div>
-            <div className="form-group">
-              <label>Mật khẩu</label>
-              <input
-                className="form-control"
-                placeholder="******"
-                type="password"
-                ref={passwordInputRef}
-              />
-              {!!errorPassword && (
-                <p className={classes.invalid}>{errorPassword}</p>
-              )}
-            </div>
-            <div className="form-group">
-              <button
-                type="submit"
-                className="btn btn-primary btn-block mt-4 form-control"
-              >
-                Đăng nhập
-              </button>
-            </div>
-          </form>
-        </article>
+    <>
+      {isLoading && <Modal children={<Loader />} />}
+      <div className={classes.layout}>
+        <div className="card">
+          {invalidForm && (
+            <span className={`text-center mt-2 ${classes.invalid}`}>
+              SĐT hoặc mật khẩu không đúng
+            </span>
+          )}
+          <article className="card-body">
+            <Link
+              to="/auth/signup"
+              className="float-end btn btn-outline-primary"
+            >
+              Đăng kí
+            </Link>
+            <h4 className="card-title mb-4 mt-1">iMuseum</h4>
+            <form onSubmit={submitFormHandler}>
+              <div className="form-group">
+                <label>Số điện thoại</label>
+                <input
+                  name="phone"
+                  className="form-control"
+                  type="tel"
+                  ref={phoneInputRef}
+                  maxLength={10}
+                  width={10}
+                />
+                {!!errorPhone && (
+                  <p className={classes.invalid}>{errorPhone}</p>
+                )}
+              </div>
+              <div className="form-group">
+                <label>Mật khẩu</label>
+                <input
+                  className="form-control"
+                  placeholder="******"
+                  type="password"
+                  ref={passwordInputRef}
+                />
+                {!!errorPassword && (
+                  <p className={classes.invalid}>{errorPassword}</p>
+                )}
+              </div>
+              <div className="form-group">
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block mt-4 form-control"
+                >
+                  Đăng nhập
+                </button>
+              </div>
+            </form>
+          </article>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

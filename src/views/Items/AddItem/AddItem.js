@@ -10,7 +10,6 @@ import Editor from "../../../components/Editor/Editor";
 import Swal from "sweetalert2";
 
 function AddItem() {
-  console.log("render add item");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -48,6 +47,7 @@ function AddItem() {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(description);
     if (!e.target.checkValidity()) {
       return setIsValidated(true);
     }
@@ -216,12 +216,6 @@ function AddItem() {
           <label htmlFor="description" className="form-label">
             Mô tả
           </label>
-          {/*<textarea*/}
-          {/*  ref={descriptionInputRef}*/}
-          {/*  className="form-control"*/}
-          {/*  id="description"*/}
-          {/*  rows="7"*/}
-          {/*></textarea>*/}
           <Editor changeDescriptionHandler={changeDescriptionHandler} />
         </div>
         <div className="col-12">
