@@ -1,5 +1,9 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import Date from "components/Date/Date";
+import dayjs from "dayjs";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   deleteImages,
   getAges,
@@ -7,15 +11,11 @@ import {
   getMaterials,
   updateItem,
 } from "../../../api/item";
-import Modal from "../../../UI/Modal";
-import Loader from "../../../UI/Loader";
-import Swal from "sweetalert2";
 import Editor from "../../../components/Editor/Editor";
-import { useDispatch } from "react-redux";
 import { titleActions } from "../../../store/title";
+import Loader from "../../../UI/Loader";
+import Modal from "../../../UI/Modal";
 import ItemImage from "./ItemImage";
-import dayjs from "dayjs";
-import Date from "components/Date/Date";
 
 function Item(props) {
   const id = useParams().id;
@@ -49,9 +49,19 @@ function Item(props) {
     Promise.all([getAges(), getMaterials(), getItem(id)]).then((responses) => {
       setAges(responses[0].data);
       setMaterials(responses[1].data);
-      setItem(responses[2].data.item);
-      setDate(responses[2].data.item.collected_date);
-      setIsLoading(false);
+      if (responses[2].status !== 200) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Đã có lỗi xảy ra.",
+        });
+        history.goBack();
+      } else {
+        console.log(responses[2].data.item);
+        setItem(responses[2].data.item);
+        setDate(responses[2].data.item.collected_date || "");
+        setIsLoading(false);
+      }
     });
   }, [id, dispatch]);
 
@@ -92,7 +102,10 @@ function Item(props) {
         formData.append("weight", weightInputRef.current.value);
         formData.append("ageId", ageInputRef.current.value);
         formData.append("materialId", materialInputRef.current.value);
-        formData.append("collected_date", date);
+        formData.append(
+          "collected_date",
+          typeof date === "object" ? null : date
+        );
         formData.append("description", description);
         if (featureImageInputRef.current.files.length > 0) {
           formData.append(

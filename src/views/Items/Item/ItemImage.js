@@ -7,7 +7,7 @@ const ItemImage = ({ imageSrc, handleCloseModal }) => {
       <img
         src={imageSrc}
         alt="Ảnh hiện vật"
-        width="100%"
+        style={{ maxHeight: "80vh", maxWidth: "80vw" }}
         className="rounded mb-2"
       />
       <div className="d-flex justify-content-end">

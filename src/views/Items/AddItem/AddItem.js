@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { addItem, getAges, getMaterials } from "../../../api/item";
-import Loader from "../../../UI/Loader";
-import { useHistory } from "react-router-dom";
-import Modal from "../../../UI/Modal";
-import { useDispatch } from "react-redux";
-import { titleActions } from "../../../store/title";
-import Editor from "../../../components/Editor/Editor";
-import Swal from "sweetalert2";
-import dayjs from "dayjs";
 import Date from "components/Date/Date";
+import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
+import { addItem, getAges, getMaterials } from "../../../api/item";
+import Editor from "../../../components/Editor/Editor";
+import { titleActions } from "../../../store/title";
+import Loader from "../../../UI/Loader";
+import Modal from "../../../UI/Modal";
 
 function AddItem() {
   const dispatch = useDispatch();
@@ -68,7 +68,7 @@ function AddItem() {
     formData.append("weight", weightInputRef.current.value);
     formData.append("ageId", ageInputRef.current.value);
     formData.append("materialId", materialInputRef.current.value);
-    formData.append("collected_date", date);
+    formData.append("collected_date", typeof date === "object" ? null : date);
     formData.append("description", description);
     formData.append("feature_image", featureImageInputRef.current.files[0]);
     for (const file of imagesInputRef.current.files) {
@@ -76,8 +76,16 @@ function AddItem() {
     }
 
     addItem(formData).then((response) => {
-      Swal.fire("Good job!", "Thêm hiện vật mới thành công!", "success");
-      history.push("/admin/items");
+      if (response.status === 201) {
+        Swal.fire("Good job!", "Thêm hiện vật mới thành công!", "success");
+        history.push("/admin/items");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Đã có lỗi xảy ra.",
+        });
+      }
     });
   };
 
