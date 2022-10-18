@@ -1,19 +1,28 @@
-import {lazy} from "react";
+import { lazy } from "react";
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import { FormatListBulleted } from "@material-ui/icons";
 // core components/views for Admin layout
 const UserProfile = lazy(() => import("views/UserProfile/UserProfile.js"));
 const Items = lazy(() => import("./layouts/Admin/Items/Items"));
 const Collections = lazy(() =>
   import("./layouts/Admin/Collections/Collections")
 );
+const DashboardPage = lazy(() => import("./views/Dashboard/Dashboard"));
 
 const dashboardRoutes = [
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: Dashboard,
+    component: DashboardPage,
+    layout: "/admin",
+  },
+  {
     path: "/items",
     name: "Tất cả hiện vật",
-    icon: Dashboard,
+    icon: FormatListBulleted,
     component: Items,
     layout: "/admin",
   },

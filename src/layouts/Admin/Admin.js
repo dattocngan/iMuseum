@@ -20,7 +20,7 @@ import Loader from "../../UI/Loader";
 let ps;
 
 const switchRoutes = (
-  <Suspense fallback={<Modal children={<Loader/>}/>}>
+  <Suspense fallback={<Modal children={<Loader />} />}>
     <Switch>
       {routes.map((prop, key) => {
         if (prop.layout === "/admin") {
@@ -34,15 +34,14 @@ const switchRoutes = (
         }
         return null;
       })}
-      <Redirect from="/admin" to="/admin/items"/>
+      <Redirect from="/admin" to="/admin/dashboard" />
     </Switch>
   </Suspense>
-
 );
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({...rest}) {
+export default function Admin({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices

@@ -6,6 +6,10 @@ import moment from "moment";
 
 const Date = ({ handleChange, date, label, className }) => {
   const handleChangeDate = (newValue) => {
+    if (!newValue) {
+      handleChange(null);
+      return;
+    }
     const formattedDate = moment(newValue.$d).format("YYYY-MM-DD");
     handleChange(formattedDate);
   };

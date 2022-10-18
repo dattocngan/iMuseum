@@ -65,7 +65,7 @@ export default function UserProfile() {
   }, []);
 
   const handleChangeBirthday = (newValue) => {
-    console.log(newValue);
+    // console.log(newValue);
     setBirthday(newValue);
   };
 
@@ -91,6 +91,15 @@ export default function UserProfile() {
 
     if (!isChangingPassword) {
       setIsLoading(true);
+      if (!birthday) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Ngày sinh không được để trống.",
+        });
+        setIsLoading(false);
+        return;
+      }
       updateCollectorInformation({
         full_name: profileInput.fullname,
         mobile: profileInput.mobile,
@@ -101,7 +110,9 @@ export default function UserProfile() {
         introduction: introduction, //cai nay la dung cua editor
       }).then((response) => {
         setIsLoading(false);
+        console.log(response);
         if (response.status === 200) {
+          localStorage.setItem("name", profileInput.fullname);
           Swal.fire("Thành công!", response.data.message, "success");
         } else {
           Swal.fire({

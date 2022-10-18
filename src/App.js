@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { authActions } from "./store/auth";
-import { useJwt } from "react-jwt";
+import { decodeToken, useJwt } from "react-jwt";
 import { setHeader } from "./api/http";
 import Modal from "./UI/Modal";
 import Loader from "./UI/Loader";
@@ -19,7 +19,9 @@ const App = () => {
 
   useEffect(() => {
     if (token && !isExpired) {
-      localStorage.setItem("name", decodedToken?.name);
+      if (!localStorage.getItem("name")) {
+        localStorage.setItem("name", decodedToken?.name);
+      }
       setHeader(token);
       dispatch(authActions.login());
     } else {
