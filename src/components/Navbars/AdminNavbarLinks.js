@@ -1,23 +1,23 @@
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Divider from "@material-ui/core/Divider";
+import Grow from "@material-ui/core/Grow";
+import Hidden from "@material-ui/core/Hidden";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Hidden from "@material-ui/core/Hidden";
 import Poppers from "@material-ui/core/Popper";
-import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
 
-import Button from "components/CustomButtons/Button.js";
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
-import { authActions } from "../../store/auth";
+import Button from "components/CustomButtons/Button.js";
 import { Link } from "react-router-dom";
+import { authActions } from "../../store/auth";
 
 const useStyles = makeStyles(styles);
 

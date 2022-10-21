@@ -27,6 +27,6 @@ yarn-error.log*
 .firebaserc
 firebase.json
 
-# package-lock.json
+package-lock.json
 
 commit.sh

@@ -1,12 +1,17 @@
 import { getCollections } from "api/collection";
 import { getCollectorInformation } from "api/collector";
 import { getItems } from "api/item";
-import React, { useEffect, useState } from "react";
-import DashboardChart from "./DashboardChart";
 import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { titleActions } from "store/title";
+import Loader from "UI/Loader";
+import Modal from "UI/Modal";
+import DashboardChart from "./DashboardChart";
 
 const Dashboard = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
   const [collectorInfomation, setCollectorInformation] = useState({
     fullname: "",
     birthday: "",
@@ -23,6 +28,11 @@ const Dashboard = () => {
     acceptedCollections: 0,
     queuedCollections: 0,
   });
+
+  useEffect(() => {
+    dispatch(titleActions.setTitle(""));
+  }, [dispatch]);
+
   useEffect(() => {
     Promise.all([
       getCollectorInformation(),
@@ -43,7 +53,9 @@ const Dashboard = () => {
 
       setCollectorInformation({
         fullname: responses[0].data.full_name,
-        birthday: moment(responses[0].data.birth_date).format("DD/MM/YYYY"),
+        birthday: responses[0].data.birth_date
+          ? moment(responses[0].data.birth_date).format("DD/MM/YYYY")
+          : "",
         email: responses[0].data.email,
       });
       setItemsInformation({
@@ -56,79 +68,86 @@ const Dashboard = () => {
         acceptedCollections,
         queuedCollections,
       });
+
+      setIsLoading(false);
     });
   }, []);
 
   return (
-    <div className="row gy-3">
-      <h3>Dashboard</h3>
-      <div className="col-md-6">
-        <div className="card">
-          <div className="card-header">Nhà sưu tập</div>
-          <div className="card-body">
-            <p className="card-title fw-bold">
-              Họ tên: {collectorInfomation.fullname}
-            </p>
-            <p className="card-text mb-1">
-              Ngày sinh: {collectorInfomation.birthday}
-            </p>
-            <p className="card-text">
-              Địa chỉ email: {collectorInfomation.email}
-            </p>
+    <>
+      {isLoading && <Modal children={<Loader />} />}
+      {!isLoading && (
+        <div className="row gy-3">
+          <h3>Dashboard</h3>
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-header">Nhà sưu tập</div>
+              <div className="card-body">
+                <p className="card-title fw-bold">
+                  Họ tên: {collectorInfomation.fullname}
+                </p>
+                <p className="card-text mb-1">
+                  Ngày sinh: {collectorInfomation.birthday}
+                </p>
+                <p className="card-text">
+                  Địa chỉ email: {collectorInfomation.email}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="col-md-3">
-        <div className="card">
-          <div className="card-header text-center">Tổng số hiện vật</div>
-          <div className="card-body d-flex justify-content-center">
-            <span className="card-text fs-2 fw-bold">
-              {itemsInformation.totalItems}
-            </span>
+          <div className="col-md-3">
+            <div className="card">
+              <div className="card-header text-center">Tổng số hiện vật</div>
+              <div className="card-body d-flex justify-content-center">
+                <span className="card-text fs-2 fw-bold">
+                  {itemsInformation.totalItems}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="col-md-3">
-        <div className="card">
-          <div className="card-header text-center">Tổng số bộ sưu tập</div>
-          <div className="card-body d-flex justify-content-center">
-            <span className="card-text fs-2 fw-bold">
-              {collectionsInformation.totalCollections}
-            </span>
+          <div className="col-md-3">
+            <div className="card">
+              <div className="card-header text-center">Tổng số bộ sưu tập</div>
+              <div className="card-body d-flex justify-content-center">
+                <span className="card-text fs-2 fw-bold">
+                  {collectionsInformation.totalCollections}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-header">Hiện vật</div>
-          <div className="card-body">
-            <DashboardChart
-              statistics={[
-                itemsInformation.acceptedItems,
-                itemsInformation.queuedItems,
-              ]}
-            />
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-header">Hiện vật</div>
+              <div className="card-body">
+                <DashboardChart
+                  statistics={[
+                    itemsInformation.acceptedItems,
+                    itemsInformation.queuedItems,
+                  ]}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="col-md-4">
-        <div className="card">
-          <div className="card-header">Bộ sưu tập</div>
-          <div className="card-body">
-            <DashboardChart
-              statistics={[
-                collectionsInformation.acceptedCollections,
-                collectionsInformation.queuedCollections,
-              ]}
-            />
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-header">Bộ sưu tập</div>
+              <div className="card-body">
+                <DashboardChart
+                  statistics={[
+                    collectionsInformation.acceptedCollections,
+                    collectionsInformation.queuedCollections,
+                  ]}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

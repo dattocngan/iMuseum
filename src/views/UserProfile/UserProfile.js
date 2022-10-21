@@ -1,13 +1,13 @@
 import { getCollectorInformation, updateCollectorInformation } from "api/http";
+import Date from "components/Date/Date";
+import Editor from "components/Editor/Editor";
+import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 import Loader from "UI/Loader";
 import Modal from "UI/Modal";
-import Swal from "sweetalert2";
-import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
 import { titleActions } from "../../store/title";
-import Editor from "components/Editor/Editor";
-import Date from "components/Date/Date";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
